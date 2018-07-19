@@ -9,10 +9,6 @@ export const MainConfig = {
     },
     routes  : [
         {
-            path     : '/form-builder',
-            component: FormBuilder
-        },
-        {
             path     : '/example',
             component: Example
         }

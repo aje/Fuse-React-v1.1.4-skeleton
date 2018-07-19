@@ -9,7 +9,8 @@ import FuseAnimate from "../../../@fuse/components/FuseAnimate/FuseAnimate";
 
 import classNames from 'classnames';
 import FieldList from "./FieldList";
-import ShortText from "./Editors/ShortText";
+import ViewWrapper from "./Editors/ViewWrapper";
+import Editor from "./Editors/Editor";
 
 const styles = theme => ({
     root         : {
@@ -35,37 +36,40 @@ const styles = theme => ({
     search       : {
         paddingLeft: 16
     },
-    cardMargin: {
-        marginTop: theme.spacing.unit
-    },
-    cardHeader: {
-        paddingBottom: 0
-    }
 });
 class FormBuilder extends Component {
     state = {
-        textSchema : {
-            "type": "object",
-            properties: {
-                label: {type: "string", title: "Label"},
-                title: {type: "string", title: "Placeholder"},
-                required: {type: "boolean", title: "Required", default: false}
-            }
-        },
+        formTitle: "",
         formAction: "",
+        formDescription: "",
         currentIndex: 0,
         schema : {
             "type": "object",
             title: "",
             description: "",
-            properties: {}
-        }
+            properties: {
+                title: {type: "string", title: "Placeholder"},
+                name: {type: "string", title: "Your name", description:"name"}
+            }
+        },
+        uiSchema: {
+            "title": {
+                "ui:widget": "password",
+                "ui:disabled": "true"
+            },
+            "name": {
+                "ui:disabled": "true"
+            }
+        },
+        currentItem: {
+            }
     };
 
-    formActionInputHandler = (e) => {
-        this.setState({formAction: e.target.value})
+    handleChange = name => event => {
+        this.setState({
+            [name]: event.target.value,
+        });
     };
-
 
     addTextField = () => {
         const t = {...this.state.schema};
@@ -82,21 +86,15 @@ class FormBuilder extends Component {
         this.setState({schema: t})
     };
 
+    addLongText = () => {
 
-    addLongText= () => {
-        const t = {...this.state.schema};
-        t.properties = {
-            ...this.state.schema.properties,
-            newTitle: {type: "string", title: "New Title"},
-        };
-        this.setState({schema: t})
+    };
+    onChangeEditor = (item) => {
+        this.setState({currentItem: item});
+        console.log(item);
     };
 
-
-
     render(){
-
-
         const {classes} = this.props;
         return (
             <FusePageSimple
@@ -118,24 +116,20 @@ class FormBuilder extends Component {
                     <div className="p-24">
                         <Grid container spacing={24}>
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
-                                <Grid item xs={3}>
+                                <Grid item xs={2}>
                                     <FieldList addShortText={this.addTextField} addLongText={this.addLongText}/>
                                 </Grid>
                             </FuseAnimate>
+
+                            <FuseAnimate animation="transition.slideUpIn" delay={200}>
+                                <Grid item xs={6}>
+                                    <ViewWrapper changeEditor={this.onChangeEditor} schema={this.state.schema} uiSchema={this.state.uiSchema}/>
+                                </Grid>
+                            </FuseAnimate>
+
                             <FuseAnimate animation="transition.slideRightIn" delay={200}>
-                                <Grid item xs={9}>
-                                    <Paper className={classes.searchWrapper}>
-                                        <Icon color="action">send</Icon>
-                                        <Input
-                                            placeholder="Form actoin"
-                                            className={classes.search}
-                                            disableUnderline
-                                            fullWidth
-                                            value={this.state.formAction}
-                                            onChange={(e) => this.formActionInputHandler(e)}
-                                        />
-                                    </Paper>
-                                    <ShortText/>
+                                <Grid item xs={4}>
+                                    <Editor item={this.state.currentItem}/>
                                 </Grid>
                             </FuseAnimate>
                         </Grid>

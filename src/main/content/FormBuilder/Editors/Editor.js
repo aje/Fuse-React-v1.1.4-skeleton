@@ -11,57 +11,25 @@ import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlL
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
 import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 
 const styles = theme => ({
-    root         : {
-        display: 'flex',
-        flex   : '1'
-    },
-    searchWrapper: {
-        width                         : '100%',
-        height                        : 56,
-        padding                       : 18,
-        [theme.breakpoints.down('md')]: {
-            paddingLeft: 8
-        },
-        display                       : 'flex',
-        alignItems                    : 'center'
-    },
-    logoIcon         : {
-        fontSize: '32px!important'
-    },
-    logoText         : {
-        fontSize: 24
-    },
-    search       : {
-        paddingLeft: 16
-    },
-    cardMargin: {
-        marginTop: theme.spacing.unit
-    },
     cardHeader: {
-        paddingBottom: 0
+        backgroundColor: theme.palette.primary[500]
+    },
+    cardTitle: {
+        color: "white"
     }
 });
 
-class ShortText  extends Component{
+class Editor  extends Component{
     state = {
         textSchema : {
             "type": "object",
             properties: {
-                label: {type: "string", title: "Label"},
-                title: {type: "string", title: "Placeholder"},
-                required: {type: "boolean", title: "Required", default: false}
+                label: {type: "string", title: "Label"}
             }
-        },
-        formAction: "",
-        currentIndex: 0,
-        schema : {
-            "type": "object",
-            title: "",
-            description: "",
-            properties: {}
         }
     };
 
@@ -123,41 +91,19 @@ class ShortText  extends Component{
             CheckboxWidget: this.CustomCheckbox
         };
 
-        const uiSchema = {
-            title: {
-                "ui:options": {
-                    label: false
-                }
-            }
-        };
 
         return (
-            <Card classes={{root: classes.cardMargin}}>
+            <Card>
                 <CardHeader
-                    classes={{root: classes.cardHeader}}
-                    action={
-                        <Au>
-                            <IconButton>
-                                <Icon>zoom_out_map</Icon>
-                            </IconButton>
-
-                            <IconButton>
-                                <Icon>delete</Icon>
-                            </IconButton>
-
-                            <IconButton>
-                                <Icon>check</Icon>
-                            </IconButton>
-                        </Au>
-                    }
-                    title={`Edit short text `}
+                    classes={{root: classes.cardHeader, title: classes.cardTitle}}
+                    title={"Edit " + (this.props.item.schema !== undefined ? this.props.item.schema.title : "Choose one")}
                 />
 
                 <CardContent>
-                    <Form schema={this.state.textSchema}
+
+                    <Form schema={(this.props.item.schema !== undefined ? this.props.item.schema: this.state.textSchema)}
                           fields={fields}
                           widgets={widgets}
-                          uiSchema={uiSchema}
                           FieldTemplate={this.CustomFieldTemplate}
                     >
                         <div>
@@ -169,4 +115,4 @@ class ShortText  extends Component{
     }
 }
 
-export default withStyles(styles, {withTheme: true})(ShortText);
+export default withStyles(styles, {withTheme: true})(Editor);

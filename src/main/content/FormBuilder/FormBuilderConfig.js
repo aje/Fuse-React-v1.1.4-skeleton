@@ -3,7 +3,12 @@ import FormBuilder from './FormBuilder';
 export const FormBuilderConfig = {
     settings: {
         layout: {
-            config: {}
+            config: {
+                navbar : {
+                    display : true,
+                    folded  : true,
+                },
+            }
         }
     },
     routes  : [

@@ -13,7 +13,7 @@ import ListSubheader from "@material-ui/core/es/ListSubheader/ListSubheader";
 const FieldList = (props) => {
     return (
         <Card>
-            <List  subheader={<ListSubheader>Add anything you want</ListSubheader>}>
+            <List dense subheader={<ListSubheader>BASIC WIDGETS</ListSubheader>}>
                 <ListItem>
                     <ListItemIcon>
                         <Icon>short_text</Icon>
