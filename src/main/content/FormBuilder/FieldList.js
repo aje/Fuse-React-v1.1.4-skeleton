@@ -22,7 +22,7 @@ const FieldList = (props) => {
                         primary="Short text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={props.add} aria-label="Add">
+                        <IconButton  onClick={() => props.add('shortText')} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -37,22 +37,7 @@ const FieldList = (props) => {
                         primary="Long text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={props.add} aria-label="Add">
-                            <Icon>add</Icon>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-                <Divider component={'li'} />
-
-                <ListItem>
-                    <ListItemIcon>
-                        <Icon>check_box</Icon>
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Checkbox"
-                    />
-                    <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton  onClick={() => props.add('longText')} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -67,7 +52,7 @@ const FieldList = (props) => {
                         primary="Checkbox group"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton aria-label="Add" onClick={() => props.add('checkbox')} >
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -127,7 +112,7 @@ const FieldList = (props) => {
                         primary="Select list"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton aria-label="Add"  onClick={() => props.add('select')} >
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>

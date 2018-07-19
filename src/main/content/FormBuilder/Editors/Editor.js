@@ -133,6 +133,13 @@ class Editor  extends Component{
             // }
         };
 
+        const switchEdit = (item) => {
+            console.log(item)
+            // switch (item.type) {
+            //     case ""
+            // }
+        };
+
 
         return (
             <Card>
@@ -143,14 +150,17 @@ class Editor  extends Component{
 
                 <CardContent>
 
-                    <Form schema={(this.state.schema)}
-                          widgets={widgets}
-                          fields={fields}
-                          formData={this.state.formData}
-                          uiSchema={uiSchema}
-                          FieldTemplate={CustomFieldTemplate}
-                          onSubmit={this.onSubmit}
-                    />
+                    {/*<Form schema={(this.state.schema)}*/}
+                          {/*widgets={widgets}*/}
+                          {/*fields={fields}*/}
+                          {/*formData={this.state.formData}*/}
+                          {/*uiSchema={uiSchema}*/}
+                          {/*FieldTemplate={CustomFieldTemplate}*/}
+                          {/*onSubmit={this.onSubmit}*/}
+                    {/*/>*/}
+                    <form>
+                        {switchEdit(this.props.item.schema)}
+                    </form>
                 </CardContent>
             </Card>
         )

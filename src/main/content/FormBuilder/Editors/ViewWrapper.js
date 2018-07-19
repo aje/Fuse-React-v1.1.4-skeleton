@@ -36,7 +36,7 @@ class ViewWrapper extends Component{
     render () {
         const {classes} = this.props;
         const CustomInput = (prop) => {
-            console.log(prop)
+            // console.log(prop)
             return (
                 <Paper square elevation={1} className={this.props.classes.hover}>
                     <CardContent onClick={() => this.props.changeEditor(prop)}>
@@ -55,19 +55,24 @@ class ViewWrapper extends Component{
 
         const CustomCheckbox = (prop) =>{
             return (
-                <div>
-                    {prop.title}
-                    <FormControlLabel
-                        control={
-                            <Checkbox
-                                checked={prop.value}
-                                onChange={() => prop.onChange(!prop.value)}
-                                value={prop.title}
-                            />
-                        }
-                        label={prop.schema.title}
-                    />
-                </div>
+                <Paper square elevation={1} className={this.props.classes.hover}>
+                    <CardContent onClick={() => this.props.changeEditor(prop)}>
+                        {prop.title}
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={prop.value}
+                                    onChange={() => prop.onChange(!prop.value)}
+                                    value={prop.title}
+                                />
+                            }
+                            label={prop.schema.title}
+                        />
+                    </CardContent>
+                    <Button variant="fab" onClick={()=> this.props.remove(prop.name)} mini color="secondary" className={this.props.classes.closeBtn}>
+                        <Icon>close</Icon>
+                    </Button>
+                </Paper>
             );
         };
 
@@ -85,8 +90,6 @@ class ViewWrapper extends Component{
         const widgets = {
             CheckboxWidget: CustomCheckbox
         };
-
-
 
         return (
             <Au>
