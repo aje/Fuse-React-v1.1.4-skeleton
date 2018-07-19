@@ -1,7 +1,5 @@
 import React, {Component}  from "react";
-import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import Au from "../../../../hoc/Au";
-import Icon from "@material-ui/core/es/Icon/Icon";
 import CardContent from "@material-ui/core/es/CardContent/CardContent";
 import CardHeader from "@material-ui/core/es/CardHeader/CardHeader";
 import {withStyles} from "@material-ui/core/styles/index";
@@ -9,9 +7,9 @@ import Card from "@material-ui/core/es/Card/Card";
 import Form from "react-jsonschema-form";
 import FormControlLabel from "@material-ui/core/es/FormControlLabel/FormControlLabel";
 import Checkbox from "@material-ui/core/es/Checkbox/Checkbox";
-import Grid from "@material-ui/core/es/Grid/Grid";
 import TextField from "@material-ui/core/es/TextField/TextField";
-import Typography from "@material-ui/core/es/Typography/Typography";
+import Input from "@material-ui/core/es/Input/Input";
+import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
 
 
 const styles = theme => ({
@@ -25,70 +23,114 @@ const styles = theme => ({
 
 class Editor  extends Component{
     state = {
-        textSchema : {
+        schema : {
             "type": "object",
             properties: {
-                label: {type: "string", title: "Label"}
+                label: {type: "string", title: "Label"},
+                default: {type: "string", title: "Default Value"},
+                placeholder: {type: "string", title: "Place Holder"},
+                // type: {type: "string", title: "type",
+                //     "enum": [
+                //         "Number",
+                //         "Phone",
+                //         "Email"
+                //     ]
+                // },
+                require: {type: "boolean", title: "Require", default: false}
+            }
+        },
+        formData:{
+            label: "titleee"
+        },
+        t : 1
+
+    };
+
+    componentDidUpdate = () => {
+        if(this.props.item.schema !== undefined ) {
+            if (this.state.schema.properties.label.default !== this.props.item.schema.title) {
+                // console.log(this.props.item.schema);
+                //console.log(this.state.schema.properties.label.default !== this.props.item.schema.title);
+                const t = {...this.state.schema};
+                t.properties = {
+                    ...this.state.schema.properties,
+                    label: {type: "string", title: "Label", default: this.props.item.schema.title}
+                };
+                const tdata = {
+                    ...this.state.formData,
+                    label: this.props.item.schema.title
+                };
+                this.setState({formData: tdata});
+                this.setState({schema: t});
+
             }
         }
     };
 
-    CustomInput = (prop) => {
-        return (
-            <Grid item xs={6}>
-                <TextField fullWidth
-                           id="custom"
-                           onChange={(event) => prop.onChange(event.target.value)}
-                           value={prop.value}
-                           label={prop.schema.title}
-                />
-            </Grid>
-        );
-    };
-
-    CustomCheckbox = (prop) =>{
-        return (
-            <div>
-                {prop.title}
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={prop.value}
-                            onChange={() => prop.onChange(!prop.value)}
-                            value={prop.title}
-                        />
-                    }
-                    label={prop.schema.title}
-                />
-            </div>
-        );
-    };
-
-    CustomTitleField = ({title, required}) => {
-        const legend = required ? title + '*' : title;
-        return <h3 id="custom">{legend}</h3>;
-    };
-
-    CustomFieldTemplate = (e) => {
-        const {id, className, label, help, required, description, errors, children} = e;
-        return (
-            <Au>
-                {children}
-            </Au>
-        );
-    };
+    onSubmit = ({formData}) => console.log("Data submitted: ",  formData);
 
     render() {
 
+        const CustomFieldTemplate = (e) => {
+            const {id, className, label, help, required, description, errors, children} = e;
+            return (
+                <Au>
+                    {children}
+                </Au>
+            );
+        };
+        const CustomInput = (prop) => {
+            console.log(prop)
+            return (
+                <TextField fullWidth
+                           select={prop.schema.enum !== undefined}
+                       defaultValue={prop.schema.default}
+                       onChange={(event) => prop.onChange(event.target.value)}
+                       label={prop.schema.title}
+                >
+                    {(prop.schema.enum !== undefined)? prop.schema.enum.map(option => (
+                        <MenuItem key={option} value={option}>
+                            {option}
+                        </MenuItem>
+                    )): ''}
+                </TextField>
+            );
+        };
+
+        const CustomCheckbox = (prop) =>{
+            return (
+                <div>
+                    {prop.title}
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={prop.value}
+                                onChange={() => prop.onChange(!prop.value)}
+                                value={prop.title}
+                            />
+                        }
+                        label={prop.schema.title}
+                    />
+                </div>
+            );
+        };
+
         const {classes} = this.props;
         const fields = {
-            TitleField: this.CustomTitleField,
-            StringField: this.CustomInput
+            //TitleField: this.CustomTitleField,
+            StringField: CustomInput
 
         };
 
         const widgets = {
-            CheckboxWidget: this.CustomCheckbox
+            CheckboxWidget: CustomCheckbox,
+        };
+
+
+        const uiSchema = {
+            // uiSchematype: {
+            //     "ui:widget": "select"
+            // }
         };
 
 
@@ -101,14 +143,14 @@ class Editor  extends Component{
 
                 <CardContent>
 
-                    <Form schema={(this.props.item.schema !== undefined ? this.props.item.schema: this.state.textSchema)}
-                          fields={fields}
+                    <Form schema={(this.state.schema)}
                           widgets={widgets}
-                          FieldTemplate={this.CustomFieldTemplate}
-                    >
-                        <div>
-                        </div>
-                    </Form>
+                          fields={fields}
+                          formData={this.state.formData}
+                          uiSchema={uiSchema}
+                          FieldTemplate={CustomFieldTemplate}
+                          onSubmit={this.onSubmit}
+                    />
                 </CardContent>
             </Card>
         )

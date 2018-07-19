@@ -48,21 +48,18 @@ class FormBuilder extends Component {
             title: "",
             description: "",
             properties: {
-                title: {type: "string", title: "Placeholder"},
-                name: {type: "string", title: "Your name", description:"name"}
+
             }
         },
         uiSchema: {
             "title": {
-                "ui:widget": "password",
                 "ui:disabled": "true"
             },
             "name": {
                 "ui:disabled": "true"
             }
         },
-        currentItem: {
-            }
+        currentItem: {}
     };
 
     handleChange = name => event => {
@@ -71,7 +68,7 @@ class FormBuilder extends Component {
         });
     };
 
-    addTextField = () => {
+    addField = () => {
         const t = {...this.state.schema};
         t.properties = {
             ...this.state.schema.properties,
@@ -86,12 +83,27 @@ class FormBuilder extends Component {
         this.setState({schema: t})
     };
 
-    addLongText = () => {
+    removeField = (name) => {
+        //const requiredFields = state.schema.required || [];
+        const t = {...this.state.schema};
+        delete t.properties[name];
+        console.log( t.properties[name]);
+        //delete t.uiSchema[name];
+        // t.uiSchema["ui:order"] = state.uiSchema["ui:order"].filter(
+        //     (field) => field !== name);
+        // state.schema.required = requiredFields
+        //     .filter(requiredFieldName => name !== requiredFieldName);
 
+
+        // if (t.schema.required.length === 0) {
+        //     this.setState({schema: {}})
+        // }
+        this.setState({schema: t})
     };
+
     onChangeEditor = (item) => {
         this.setState({currentItem: item});
-        console.log(item);
+        // console.log(item);item
     };
 
     render(){
@@ -117,18 +129,18 @@ class FormBuilder extends Component {
                         <Grid container spacing={24}>
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Grid item xs={2}>
-                                    <FieldList addShortText={this.addTextField} addLongText={this.addLongText}/>
+                                    <FieldList add={this.addField} />
                                 </Grid>
                             </FuseAnimate>
 
                             <FuseAnimate animation="transition.slideUpIn" delay={200}>
-                                <Grid item xs={6}>
-                                    <ViewWrapper changeEditor={this.onChangeEditor} schema={this.state.schema} uiSchema={this.state.uiSchema}/>
+                                <Grid item xs={7}>
+                                    <ViewWrapper remove={this.removeField} changeEditor={this.onChangeEditor} schema={this.state.schema} uiSchema={this.state.uiSchema}/>
                                 </Grid>
                             </FuseAnimate>
 
                             <FuseAnimate animation="transition.slideRightIn" delay={200}>
-                                <Grid item xs={4}>
+                                <Grid item xs={3}>
                                     <Editor item={this.state.currentItem}/>
                                 </Grid>
                             </FuseAnimate>

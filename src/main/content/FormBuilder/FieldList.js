@@ -22,7 +22,7 @@ const FieldList = (props) => {
                         primary="Short text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={props.addShortText} aria-label="Add">
+                        <IconButton  onClick={props.add} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -37,7 +37,7 @@ const FieldList = (props) => {
                         primary="Long text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={props.addLongText} aria-label="Add">
+                        <IconButton  onClick={props.add} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>

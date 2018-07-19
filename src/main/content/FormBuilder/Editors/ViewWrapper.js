@@ -19,6 +19,7 @@ const styles = theme => ({
         position: "relative",
         border: "1px solid transparent",
         transition: "all .2s",
+        cursor: "pointer",
         "&:hover" : {
             border: "1px dashed #aaa"
         }
@@ -31,60 +32,58 @@ const styles = theme => ({
 });
 class ViewWrapper extends Component{
 
-    CustomInput = (prop) => {
-        return (
-            <Paper square elevation={1} className={this.props.classes.hover}>
-                <CardContent onClick={() => this.props.changeEditor(prop)}>
-                    <TextField fullWidth
-                        disabled
-                        id="custom"
-                        label={prop.schema.title}
-                    />
-                </CardContent>
-                <Button variant="fab" mini color="secondary" className={this.props.classes.closeBtn}>
-                    <Icon>close</Icon>
-                </Button>
-            </Paper>
-        );
-    };
 
-    CustomCheckbox = (prop) =>{
-        return (
-            <div>
-                {prop.title}
-                <FormControlLabel
-                    control={
-                        <Checkbox
-                            checked={prop.value}
-                            onChange={() => prop.onChange(!prop.value)}
-                            value={prop.title}
-                        />
-                    }
-                    label={prop.schema.title}
-                />
-            </div>
-        );
-    };
-
-    CustomTitleField = ({title, required}) => {
-        const legend = required ? title + '*' : title;
-        return <h3 id="custom">{legend}</h3>;
-    };
-
-    CustomFieldTemplate = (e) => {
-        const {id, className, label, help, required, description, errors, children} = e;
-        return <div >{children}</div>;
-    };
     render () {
         const {classes} = this.props;
+        const CustomInput = (prop) => {
+            console.log(prop)
+            return (
+                <Paper square elevation={1} className={this.props.classes.hover}>
+                    <CardContent onClick={() => this.props.changeEditor(prop)}>
+                        <TextField fullWidth
+                                   disabled
+                                   id="custom"
+                                   label={prop.schema.title}
+                        />
+                    </CardContent>
+                    <Button variant="fab" onClick={()=> this.props.remove(prop.name)} mini color="secondary" className={this.props.classes.closeBtn}>
+                        <Icon>close</Icon>
+                    </Button>
+                </Paper>
+            );
+        };
+
+        const CustomCheckbox = (prop) =>{
+            return (
+                <div>
+                    {prop.title}
+                    <FormControlLabel
+                        control={
+                            <Checkbox
+                                checked={prop.value}
+                                onChange={() => prop.onChange(!prop.value)}
+                                value={prop.title}
+                            />
+                        }
+                        label={prop.schema.title}
+                    />
+                </div>
+            );
+        };
+
+
+        const CustomFieldTemplate = (e) => {
+            const {id, className, label, help, required, description, errors, children} = e;
+            return <div >{children}</div>;
+        };
         const fields = {
-            TitleField: this.CustomTitleField,
-            StringField: this.CustomInput
+            //TitleField: CustomTitleField,
+            StringField: CustomInput
 
         };
 
         const widgets = {
-            CheckboxWidget: this.CustomCheckbox
+            CheckboxWidget: CustomCheckbox
         };
 
 
@@ -94,7 +93,7 @@ class ViewWrapper extends Component{
                 <Form schema={this.props.schema}
                       fields={fields}
                       widgets={widgets}
-                      FieldTemplate={this.CustomFieldTemplate}
+                      FieldTemplate={CustomFieldTemplate}
                       uiSchema={this.props.uiSchema}
                 >
                     <div>
