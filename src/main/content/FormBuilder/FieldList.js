@@ -9,8 +9,162 @@ import ListItemSecondaryAction from "@material-ui/core/es/ListItemSecondaryActio
 import Divider from "@material-ui/core/es/Divider/Divider";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import ListSubheader from "@material-ui/core/es/ListSubheader/ListSubheader";
+import Typography from "@material-ui/core/es/Typography/Typography";
+import FieldWrapper from "./Editors/FieldWrapper";
+
+import * as mtd from "./FormElements/FormElements"
 
 const FieldList = (props) => {
+
+    const fieldHelper = (field, el) => {
+        return (
+            <FieldWrapper field={field} changeEditor={props.changeEditor} remove={props.remove}>
+                {el(field)}
+            </FieldWrapper>
+        )
+    };
+
+    const checkbox = {
+        schema: {
+            type: "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "foo",
+                    "bar",
+                    "fuzz"
+                ]
+            },
+            "uniqueItems": true,
+            "editType": "checkboxSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myCheckboxes)
+        },
+
+    };
+
+    const shortText = {
+        schema: {
+            type: "string",
+            "editType": "shortTextSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myText),
+        }
+    };
+
+    const longText = {
+        schema: {
+            "type": "string",
+            "editType": "longTextSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myText),
+        }
+    };
+
+    const date = {
+        schema: {
+            "type": "string",
+            "format": "date-time"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myDate),
+        }
+    };
+
+    const radioGroup = {
+        schema: {
+            type: "array",
+            "items": {
+                "type": "string",
+                "enum": [
+                    "foo",
+                    "bar",
+                    "fuzz"
+                ]
+            },
+            "uniqueItems": true,
+            "editType": "radioGroupSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myRadio)
+        }
+    };
+
+    const select = {
+        schema: {
+            "type": "string",
+            "editType": "radioGroupSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.mySelect)
+        }
+    };
+
+    const staticText = {
+        schema: {
+            "type": "string",
+            "editType": "titleSchema"
+        },
+        uiSchema: {
+            "ui:widget": (e) => {
+                return (
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                        <Typography>{e.schema.title}</Typography>
+                    </FieldWrapper>
+                );
+            }
+        }
+    };
+
+    const selectionBreak = {
+        schema: {
+            "type": "string",
+        },
+        uiSchema: {
+            "ui:widget": (e) => {
+                return (
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                        <Divider/>
+                    </FieldWrapper>
+                );
+            }
+        }
+    };
+
+    const pageBreack = {
+        schema: {
+            "type": "string",
+        },
+        uiSchema: {
+            "ui:widget": (e) => {
+                return (
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                        <Divider style={{marginBottom: 10}} />
+                    </FieldWrapper>
+                );
+            }
+        }
+    };
+
+    const staticImage = {
+        schema: {
+            "type": "string",
+        },
+        uiSchema: {
+            "ui:widget": (e) => {
+                return (
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                        <img src=""/>
+                    </FieldWrapper>
+                );
+            }
+        },
+        type: "staticImage"
+    };
+
     return (
         <Card>
             <List dense subheader={<ListSubheader>BASIC WIDGETS</ListSubheader>}>
@@ -22,7 +176,7 @@ const FieldList = (props) => {
                         primary="Short text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add('shortText')} aria-label="Add">
+                        <IconButton  onClick={() => props.add(shortText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -37,7 +191,7 @@ const FieldList = (props) => {
                         primary="Long text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add('longText')} aria-label="Add">
+                        <IconButton  onClick={() => props.add(longText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -52,22 +206,7 @@ const FieldList = (props) => {
                         primary="Checkbox group"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.add('checkbox')} >
-                            <Icon>add</Icon>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-                <Divider component={'li'} />
-
-                <ListItem>
-                    <ListItemIcon>
-                        <Icon>radio_button_checked</Icon>
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Radio"
-                    />
-                    <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton aria-label="Add" onClick={() => props.add(checkbox)} >
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -82,7 +221,7 @@ const FieldList = (props) => {
                         primary="Radio group"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton aria-label="Add" onClick={() => props.add(radioGroup)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -97,7 +236,7 @@ const FieldList = (props) => {
                         primary="Date & Time"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton aria-label="Add"  onClick={() => props.add(date)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -112,7 +251,24 @@ const FieldList = (props) => {
                         primary="Select list"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add"  onClick={() => props.add('select')} >
+                        <IconButton aria-label="Add"   onClick={() => props.add(select)}>
+                            <Icon>add</Icon>
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            </List>
+
+
+            <List dense subheader={<ListSubheader>AUXILIARY WIDGETS</ListSubheader>}>
+                <ListItem>
+                    <ListItemIcon>
+                        <Icon>notes</Icon>
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Static text"
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton  onClick={() => props.add(staticText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -121,17 +277,49 @@ const FieldList = (props) => {
 
                 <ListItem>
                     <ListItemIcon>
-                        <Icon>short_text</Icon>
+                        <Icon>border_horizontal</Icon>
                     </ListItemIcon>
                     <ListItemText
-                        primary="Date & Time"
+                        primary="Selection Break"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add">
+                        <IconButton  onClick={() => props.add(selectionBreak)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
+                <Divider component={'li'} />
+
+                <ListItem>
+                    <ListItemIcon>
+                        <Icon>border_top</Icon>
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Page break"
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="Add" onClick={() => props.add(pageBreack)} >
+                            <Icon>add</Icon>
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+                <Divider component={'li'} />
+
+                <ListItem>
+                    <ListItemIcon>
+                        <Icon>add_photo_alternate</Icon>
+                    </ListItemIcon>
+                    <ListItemText
+                        primary="Static Image"
+                    />
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="Add" onClick={() => props.add(staticImage)}>
+                            <Icon>add</Icon>
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+                <Divider component={'li'} />
+
             </List>
         </Card>
     )

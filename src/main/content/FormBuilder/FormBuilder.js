@@ -56,6 +56,7 @@ const styles = theme => ({
         right: "-20px"
     }
 });
+
 class FormBuilder extends Component {
     state = {
         formTitle: "",
@@ -64,13 +65,9 @@ class FormBuilder extends Component {
         currentIndex: 0,
         schema : {
             "type": "object",
-            "properties": {
-
-            }
+            "properties": {}
         },
-        uiSchema: {
-
-        },
+        uiSchema: {},
         currentItem: {}
     };
 
@@ -80,78 +77,39 @@ class FormBuilder extends Component {
         });
     };
 
-    myCheckboxes = (e) => {
-        console.log(e);
-        return (
-            <Au>
-                <Paper square elevation={1} className={this.props.classes.hover}>
-                    <CardContent onClick={() => this.onChangeEditor(e)}>
-                        <Typography variant={"subheading"}>{e.schema.title}</Typography>
-                        {e.schema.items.enum.map(item => (
-                            <FormControlLabel key={item}
-                                              disabled
-                                control={
-                                    <Checkbox
-                                        value={item}
-                                    />
-                                }
-                                label={item}
-                            />
-                        ))}
-                    </CardContent>
-                    <Button variant="fab" onClick={()=> this.removeField(e.name)} mini color="secondary" className={this.props.classes.closeBtn}>
-                        <Icon>close</Icon>
-                    </Button>
-                </Paper>
-            </Au>
-        )
-    };
 
-    addField = (type) => {
+
+
+    addField = (field) => {
+        // create temp for schema properties and uiSchema
         const t = {...this.state.schema};
-        t.properties = {
-            ...this.state.schema.properties,
-        };
+        t.properties = {...this.state.schema.properties};
+        const tUi = {...this.state.uiSchema};
 
+        // create a random name
         const itemp = this.state.currentIndex + 1;
-        const name = `q_${itemp}`;
+        const name = `filed_${itemp}`;
         this.setState({currentIndex: itemp});
 
-        const types = {
-            'select': 'string',
-            'shortText': 'string',
-            'longText': 'string',
-            'checkbox': 'array'
-        };
-        const tUiSchema = this.state.uiSchema;
-        t.properties[name] = {type: types[type], title: name};
-        if (type === 'checkbox') {
-            t.properties[name] = {type: "array", title: name,
-                "items": {
-                    "type": "string",
-                    "enum": [
-                        "foo",
-                        "bar",
-                        "fuzz"
-                    ]
-                },
-                "uniqueItems": true
-            };
-            tUiSchema[name] = {
-                "ui:widget": this.myCheckboxes
-            }
-        }
+        // add field to schema and ui to uiSchema
+        t.properties[name] = {...field.schema, title:name};
+        tUi[name] = field.uiSchema;
+
+        //console.log(t);
+        // console.log(tUi);
 
         // this.state.uiSchema[_slug] = field.uiSchema;
         // this.state.uiSchema["ui:order"] = (state.uiSchema["ui:order"] || []).concat(_slug);
-        this.setState({schema: t})
+
+        // set states
+        this.setState({uiSchema: tUi});
+        this.setState({schema: t});
     };
 
     removeField = (name) => {
         //const requiredFields = state.schema.required || [];
         const t = {...this.state.schema};
         delete t.properties[name];
-        console.log( t.properties[name]);
         //delete t.uiSchema[name];
         // t.uiSchema["ui:order"] = state.uiSchema["ui:order"].filter(
         //     (field) => field !== name);
@@ -193,7 +151,7 @@ class FormBuilder extends Component {
                         <Grid container spacing={24}>
                             <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Grid item xs={2}>
-                                    <FieldList add={this.addField} />
+                                    <FieldList add={this.addField}  remove={this.removeField} changeEditor={this.onChangeEditor} />
                                 </Grid>
                             </FuseAnimate>
 

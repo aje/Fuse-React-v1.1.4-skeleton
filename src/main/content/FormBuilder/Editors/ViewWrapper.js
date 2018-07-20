@@ -12,6 +12,7 @@ import {withStyles} from "@material-ui/core/styles/index";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import Icon from "@material-ui/core/es/Icon/Icon";
 import Button from "@material-ui/core/es/Button/Button";
+import FieldWrapper from "./FieldWrapper";
 
 
 const styles = theme => ({
@@ -35,67 +36,30 @@ class ViewWrapper extends Component{
 
     render () {
         const {classes} = this.props;
-        const CustomInput = (prop) => {
-            // console.log(prop)
+        const CustomInput = (e) => {
+            console.log(e.uiSchema["ui:widget"]);
             return (
-                <Paper square elevation={1} className={this.props.classes.hover}>
-                    <CardContent onClick={() => this.props.changeEditor(prop)}>
+                <FieldWrapper field={e} changeEditor={this.props.changeEditor} remove={this.props.remove}>
                         <TextField fullWidth
+                                   multiline={(e.uiSchema["ui:widget"] === "textarea")}
+                                   rows="4"
                                    disabled
-                                   id="custom"
-                                   label={prop.schema.title}
+                                   label={e.schema.title}
                         />
-                    </CardContent>
-                    <Button variant="fab" onClick={()=> this.props.remove(prop.name)} mini color="secondary" className={this.props.classes.closeBtn}>
-                        <Icon>close</Icon>
-                    </Button>
-                </Paper>
+                </FieldWrapper>
             );
         };
-
-        const CustomCheckbox = (prop) =>{
-            return (
-                <Paper square elevation={1} className={this.props.classes.hover}>
-                    <CardContent onClick={() => this.props.changeEditor(prop)}>
-                        {prop.title}
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={prop.value}
-                                    onChange={() => prop.onChange(!prop.value)}
-                                    value={prop.title}
-                                />
-                            }
-                            label={prop.schema.title}
-                        />
-                    </CardContent>
-                    <Button variant="fab" onClick={()=> this.props.remove(prop.name)} mini color="secondary" className={this.props.classes.closeBtn}>
-                        <Icon>close</Icon>
-                    </Button>
-                </Paper>
-            );
-        };
-
 
         const CustomFieldTemplate = (e) => {
             const {id, className, label, help, required, description, errors, children} = e;
             return <div >{children}</div>;
         };
-        const fields = {
-            //TitleField: CustomTitleField,
-            StringField: CustomInput
-
-        };
-
-        const widgets = {
-            CheckboxWidget: CustomCheckbox
-        };
 
         return (
             <Au>
                 <Form schema={this.props.schema}
-                      fields={fields}
-                      widgets={widgets}
+                      //fields={fields}
+                      //widgets={widgets}
                       FieldTemplate={CustomFieldTemplate}
                       uiSchema={this.props.uiSchema}
                 >
