@@ -83,7 +83,8 @@ const editField = (state, action) => {
         placeholder: action.data.placeholder,
         require: action.data.require,
         inputType: action.data.inputType,
-        rows: action.data.rows
+        rows: action.data.rows,
+        src: action.data.src
     };
 
     if (action.data.options !== undefined) {

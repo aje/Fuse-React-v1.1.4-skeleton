@@ -71,7 +71,8 @@ const FieldList = (props) => {
     const date = {
         schema: {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "editType": "dateTime",
         },
         uiSchema: {
             "ui:widget": (field) => fieldHelper(field, mtd.myDate),
@@ -116,7 +117,7 @@ const FieldList = (props) => {
             "ui:widget": (e) => {
                 return (
                     <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
-                        <Typography>{e.schema.title}</Typography>
+                        <Typography variant={e.schema.inputType}>{e.schema.title}</Typography>
                     </FieldWrapper>
                 );
             }
@@ -141,12 +142,14 @@ const FieldList = (props) => {
     const staticImage = {
         schema: {
             "type": "string",
+            "editType": "imgSchema"
         },
         uiSchema: {
             "ui:widget": (e) => {
                 return (
                     <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
-                        <img src=""/>
+                        <Typography>{e.schema.title}</Typography>
+                        <img src={e.schema.src}/>
                     </FieldWrapper>
                 );
             }

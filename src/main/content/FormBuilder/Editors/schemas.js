@@ -50,11 +50,31 @@ export const titleSchema = {
     helper: {type: "string", title: "Instructions for user"},
     inputType: {type: "string", title: "Type",
         "enum": [
-            "Header 1",
-            "Header 2",
-            "Header 3",
-            "Paragraph",
-            "Subheading",
-            "Small"
+            "display4",
+            "display3",
+            "display2",
+            "display1",
+            "headline",
+            "title",
+            "subheading",
+            "body2",
+            "body1",
+            "caption"
+        ]},
+};
+
+export const imgSchema = {
+    //helper: {type: "string", title: "Instructions for user"},
+    src: {type: "string", title: "Image src","format": "data-url"},
+};
+
+export const dateTime = {
+    helper: {type: "string", title: "Instructions for user"},
+    require: {type: "boolean", title: "Require", default: false},
+    inputType: {type: "string", title: "Type",
+        "enum": [
+            "date",
+            "time",
+            "datetime-local",
         ]},
 };

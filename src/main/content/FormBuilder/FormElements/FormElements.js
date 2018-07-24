@@ -61,11 +61,19 @@ export const myDate = (e) => {
             <TextField fullWidth
                        disabled={e.readonly || e.schema.editType !== undefined}
                        required={e.required}
-                       type="date"
+                       type={e.schema.inputType}
                        label={e.schema.title}
                        helperText={e.schema.helper}
                        defaultValue={e.schema.default}
                        placeholder={e.schema.placeholder}
+                       InputLabelProps={{
+                           shrink: true,
+                           startAdornment: (
+                               <InputAdornment position="start">
+                                   <Icon>date_range</Icon>
+                               </InputAdornment>
+                           )
+                       }}
             />
         </Au>
     )
@@ -119,11 +127,10 @@ export const myCheckboxes = (e) => {
 export const mySelect = (e) => {
     return (
        <Au>
-           <FormControl required={e.required} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
+           <FormControl required={e.required} fullWidth disabledf={e.readonly || e.schema.editType !== undefined}>
                <InputLabel>{e.schema.title}</InputLabel>
                 <Select value="f" style={{width: "100%"}}>
-                    <MenuItem value="">Please select</MenuItem>
-
+                    <MenuItem value="f">Please select</MenuItem>
                     {(e.schema.items !== undefined) ? e.schema.items.enum.map((item, i) => (
                         <MenuItem value={item} key={i}>{item}</MenuItem>
                     )) : null}
