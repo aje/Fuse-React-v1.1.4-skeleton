@@ -13,12 +13,14 @@ import Typography from "@material-ui/core/es/Typography/Typography";
 import FieldWrapper from "./Editors/FieldWrapper";
 
 import * as mtd from "./FormElements/FormElements"
+import * as aC from "./store/actions/index";
+import {connect} from "react-redux";
 
 const FieldList = (props) => {
 
     const fieldHelper = (field, el) => {
         return (
-            <FieldWrapper field={field} changeEditor={props.changeEditor} remove={props.remove}>
+            <FieldWrapper field={field} changeEditor={props.changeEditor} remove={props.removeField}>
                 {el(field)}
             </FieldWrapper>
         )
@@ -50,7 +52,18 @@ const FieldList = (props) => {
             "editType": "shortTextSchema"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myText),
+            "ui:widget": (field) => fieldHelper(field, mtd.myText)
+        }
+    };
+
+    const password = {
+        schema: {
+            type: "string",
+            "editType": "shortTextSchema"
+        },
+        uiSchema: {
+            "ui:widget": (field) => fieldHelper(field, mtd.myText()),
+            "type": "password"
         }
     };
 
@@ -176,7 +189,7 @@ const FieldList = (props) => {
                         primary="Short text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add(shortText)} aria-label="Add">
+                        <IconButton  onClick={() => props.addField(shortText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -191,7 +204,7 @@ const FieldList = (props) => {
                         primary="Long text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add(longText)} aria-label="Add">
+                        <IconButton  onClick={() => props.addField(longText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -206,7 +219,7 @@ const FieldList = (props) => {
                         primary="Checkbox group"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.add(checkbox)} >
+                        <IconButton aria-label="Add" onClick={() => props.addField(checkbox)} >
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -221,7 +234,7 @@ const FieldList = (props) => {
                         primary="Radio group"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.add(radioGroup)}>
+                        <IconButton aria-label="Add" onClick={() => props.addField(radioGroup)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -236,7 +249,7 @@ const FieldList = (props) => {
                         primary="Date & Time"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add"  onClick={() => props.add(date)}>
+                        <IconButton aria-label="Add"  onClick={() => props.addField(date)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -251,7 +264,7 @@ const FieldList = (props) => {
                         primary="Select list"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add"   onClick={() => props.add(select)}>
+                        <IconButton aria-label="Add"   onClick={() => props.addField(select)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -268,7 +281,7 @@ const FieldList = (props) => {
                         primary="Static text"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add(staticText)} aria-label="Add">
+                        <IconButton  onClick={() => props.addField(staticText)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -283,7 +296,7 @@ const FieldList = (props) => {
                         primary="Selection Break"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton  onClick={() => props.add(selectionBreak)} aria-label="Add">
+                        <IconButton  onClick={() => props.addField(selectionBreak)} aria-label="Add">
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -298,7 +311,7 @@ const FieldList = (props) => {
                         primary="Page break"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.add(pageBreack)} >
+                        <IconButton aria-label="Add" onClick={() => props.addField(pageBreack)} >
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -313,7 +326,7 @@ const FieldList = (props) => {
                         primary="Static Image"
                     />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.add(staticImage)}>
+                        <IconButton aria-label="Add" onClick={() => props.addField(staticImage)}>
                             <Icon>add</Icon>
                         </IconButton>
                     </ListItemSecondaryAction>
@@ -325,4 +338,27 @@ const FieldList = (props) => {
     )
 };
 
-export default FieldList;
+//
+// function mapDispatchToProps(dispatch)
+// {
+//     return bindActionCreators({
+//         add: Actions.ADD_FIELD,
+//         removeField: Actions.REMOVE_FIELD
+//     }, dispatch);
+// }
+
+
+const mapDispatchToProps = dispatch => {
+    return {
+        addField: (field) => dispatch(aC.addField(field)),
+        removeField: (field) => dispatch(aC.removeField(field)),
+    };
+};
+//
+// function mapStateToProps({formBuilderRedux})
+// {
+//     return {
+//         state: formBuilderRedux.state
+//     }
+// }
+export default connect(null, mapDispatchToProps)(FieldList);

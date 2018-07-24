@@ -1,19 +1,21 @@
 export const shortTextSchema =  {
-    instruction: {type: "string", title: "Instructions for user"},
+    helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},
         default: {type: "string", title: "Default Value"},
         placeholder: {type: "string", title: "Place Holder"},
-        type: {type: "string", title: "type",
+        inputType: {type: "string", title: "type",
             "enum": [
-                "Number",
-                "Phone",
-                "Email"
+                "number",
+                "tell",
+                "email",
+                "password",
+                "text"
             ]
         },
     };
 
 export const longTextSchema =  {
-    instruction: {type: "string", title: "Instructions for user"},
+    helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},
     default: {type: "string", title: "Default Value"},
     placeholder: {type: "string", title: "Place Holder"},
@@ -21,7 +23,7 @@ export const longTextSchema =  {
 };
 
 export const checkboxSchema =  {
-    instruction: {type: "string", title: "Instructions for user"},
+    helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},
     options: {
         type: "array",
@@ -31,8 +33,9 @@ export const checkboxSchema =  {
         }
     }
 };
+
 export const radioGroupSchema =  {
-    instruction: {type: "string", title: "Instructions for user"},
+    helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},
     options: {
         type: "array",
@@ -44,7 +47,7 @@ export const radioGroupSchema =  {
 };
 
 export const titleSchema = {
-    instruction: {type: "string", title: "Instructions for user"},
+    helper: {type: "string", title: "Instructions for user"},
     type: {type: "string", title: "Type",
         "enum": [
             "Header 1",

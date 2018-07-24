@@ -30,7 +30,7 @@ const fieldWrapper = (props) => {
             <CardContent onClick={() => props.changeEditor(props.field)}>
                 {props.children}
             </CardContent>
-            <Button variant="fab" onClick={()=> props.remove(props.field.schema.title)} mini color="secondary"  className={props.classes.closeBtn}>
+            <Button variant="fab" onClick={()=> props.remove(props.field.id.replace('root_', ''))} mini color="secondary"  className={props.classes.closeBtn}>
                 <Icon>close</Icon>
             </Button>
         </Paper>

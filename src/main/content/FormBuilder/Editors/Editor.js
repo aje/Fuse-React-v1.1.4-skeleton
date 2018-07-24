@@ -5,6 +5,8 @@ import {withStyles} from "@material-ui/core/styles/index";
 import Card from "@material-ui/core/es/Card/Card";
 import Form from "react-jsonschema-form";
 import * as schemas from "./schemas"
+import {connect} from "react-redux";
+import * as aC from "../store/actions";
 
 const styles = theme => ({
     cardHeader: {
@@ -24,7 +26,7 @@ class Editor  extends Component{
             }
         },
         formData:{
-            label: "titleee"
+            label: "title"
         },
         t : 1
     };
@@ -40,10 +42,22 @@ class Editor  extends Component{
 
                 const tdata = {
                     ...this.state.formData,
-                    label: this.props.item.schema.title
+                    label: this.props.item.schema.title,
+                    helper: this.props.item.schema.helper,
+                    default: this.props.item.schema.default,
+                    placeholder: this.props.item.schema.placeholder,
+                    require: this.props.item.required || this.props.item.schema.require
                 };
 
-                const tUiSchema = {};
+                // set all form types to radio
+                const tUiSchema = {
+                    inputType: {
+                        "ui:widget": "radio",
+                        "ui:options": {
+                            "inline": true
+                        }
+                    }
+                };
                 this.setState({uiSchema: tUiSchema});
                 this.setState({formData: tdata});
                 this.setState({schema: t});
@@ -52,7 +66,10 @@ class Editor  extends Component{
         }
     };
 
-    onSubmit = ({formData}) => console.log("Data submitted: ",  formData);
+    onSubmit = ({formData}) => {
+        this.props.editField(this.props.item,formData);
+        this.setState({formData: formData});
+    };
 
     render() {
         const {classes} = this.props;
@@ -68,7 +85,7 @@ class Editor  extends Component{
                     <Form schema={(this.state.schema)}
                           formData={this.state.formData}
                           uiSchema={this.state.uiSchema}
-                          onSubmit={this.onSubmit}
+                          onChange={this.onSubmit}
                     />
                 </CardContent>
             </Card>
@@ -76,4 +93,17 @@ class Editor  extends Component{
     }
 }
 
-export default withStyles(styles, {withTheme: true})(Editor);
+const mapDispatchToProps = dispatch => {
+    return {
+        editField: (field,data) => dispatch(aC.editField(field,data)),
+    };
+};
+
+const mapStateToProps = (state) => {
+    return {
+        formSchema: state.formBuilderRedux.schema,
+        uiSchema:  state.formBuilderRedux.uiSchema
+    }
+};
+
+export default withStyles(styles, {withTheme: true})(connect(mapStateToProps, mapDispatchToProps)(Editor));
