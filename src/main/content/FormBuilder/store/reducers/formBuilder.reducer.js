@@ -71,7 +71,7 @@ const removeField = (state, action) => {
 };
 
 const editField = (state, action) => {
-    console.log(action);
+    //console.log(action);
     const fieldName = action.field.id.replace('root_', '');
     const schema = {...state.schema};
     schema.properties = {...state.schema.properties};
@@ -83,6 +83,7 @@ const editField = (state, action) => {
         placeholder: action.data.placeholder,
         require: action.data.require,
         inputType: action.data.inputType,
+        rows: action.data.rows
     };
 
     if (action.data.options !== undefined) {

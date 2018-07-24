@@ -52,46 +52,6 @@ class FormBuilder extends Component {
         uiSchema: {},
         currentItem: {}
     };
-    //
-    // addField = (field) => {
-    //     // create temp for schema properties and uiSchema
-    //     const t = {...this.state.schema};
-    //     t.properties = {...this.state.schema.properties};
-    //     const tUi = {...this.state.uiSchema};
-    //
-    //     // create a random name
-    //     const itemp = this.state.currentIndex + 1;
-    //     const name = `filed_${itemp}`;
-    //     this.setState({currentIndex: itemp});
-    //
-    //     // add field to schema and ui to uiSchema
-    //     t.properties[name] = {...field.schema, title:name};
-    //     tUi[name] = field.uiSchema;
-    //
-    //     // this.state.uiSchema[_slug] = field.uiSchema;
-    //     // this.state.uiSchema["ui:order"] = (state.uiSchema["ui:order"] || []).concat(_slug);
-    //
-    //     // set states
-    //     this.setState({uiSchema: tUi});
-    //     this.setState({schema: t});
-    // };
-
-    // removeField = (name) => {
-    //     //const requiredFields = state.schema.required || [];
-    //     const t = {...this.state.schema};
-    //     delete t.properties[name];
-    //     //delete t.uiSchema[name];
-    //     // t.uiSchema["ui:order"] = state.uiSchema["ui:order"].filter(
-    //     //     (field) => field !== name);
-    //     // state.schema.required = requiredFields
-    //     //     .filter(requiredFieldName => name !== requiredFieldName);
-    //
-    //
-    //     // if (t.schema.required.length === 0) {
-    //     //     this.setState({schema: {}})
-    //     // }
-    //     this.setState({schema: t})
-    // };
 
     onChangeEditor = (item) => {
         this.setState({currentItem: item});
@@ -143,27 +103,11 @@ class FormBuilder extends Component {
     }
 }
 
-// function mapDispatchToProps(dispatch)
-// {
-//     return bindActionCreators({
-//         addField: Actions.ADD_FIELD,
-//         removeField: Actions.REMOVE_FIELD
-//     }, dispatch);
-// }
-
 const mapDispatchToProps = dispatch => {
     return {
         addField: ( field) => dispatch(Actions.addField(field)),
         removeField: (field) => dispatch(Actions.removeField(field)),
     };
 };
-
-
-// function mapStateToProps({formBuilder})
-// {
-//     return {
-//         state: formBuilder.state
-//     }
-// }
 
 export default withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(FormBuilder));

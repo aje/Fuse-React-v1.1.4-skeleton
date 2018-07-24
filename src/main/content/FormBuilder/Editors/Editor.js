@@ -22,7 +22,7 @@ class Editor  extends Component{
         schema : {
             "type": "object",
             properties: {
-                label: {type: "string", title: "Label"}
+
             }
         },
         formData:{
@@ -33,21 +33,32 @@ class Editor  extends Component{
 
     componentDidUpdate = () => {
         if(this.props.item.schema !== undefined ) {
-            if (this.state.schema.properties.label.default !== this.props.item.schema.title) {
+            if (this.state.schema.properties.label === undefined || this.state.schema.properties.label.default !== this.props.item.schema.title) {
                 const t = {...this.state.schema};
                 const label = {
                     label: {type: "string", title: "Label", default: this.props.item.schema.title}
                 };
                 t.properties = {...label, ...schemas[this.props.item.schema["editType"]]};
 
+                const item = this.props.item.schema;
+
                 const tdata = {
                     ...this.state.formData,
-                    label: this.props.item.schema.title,
-                    helper: this.props.item.schema.helper,
-                    default: this.props.item.schema.default,
-                    placeholder: this.props.item.schema.placeholder,
-                    require: this.props.item.required || this.props.item.schema.require
+                    label: item.title,
+                    helper: item.helper,
+                    default: item.default,
+                    placeholder: item.placeholder,
+                    require: this.props.item.required || item.require,
+                    inputType: item.inputType,
+                    rows: item.rows
                 };
+
+                console.log(item.items);
+
+
+                if (item.items !== undefined) {
+                    tdata.options = [...item.items.enum]
+                }
 
                 // set all form types to radio
                 const tUiSchema = {
@@ -56,7 +67,11 @@ class Editor  extends Component{
                         "ui:options": {
                             "inline": true
                         }
-                    }
+                    },
+                    "rows": {
+                        "ui:widget": "range"
+                    },
+
                 };
                 this.setState({uiSchema: tUiSchema});
                 this.setState({formData: tdata});

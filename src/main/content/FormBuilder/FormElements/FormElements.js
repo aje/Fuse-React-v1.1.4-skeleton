@@ -34,10 +34,10 @@ export const myText = (e) => {
     return (
         <Au>
             <TextField fullWidth
-                       //disabled={e.readonly || e.schema.editType !== undefined}
+                       disabled={e.readonly || e.schema.editType !== undefined}
                        required={e.required}
                        multiline={(e.schema["editType"] === "longTextSchema")}
-                       rows="4"
+                       rows={e.schema.rows}
                        type={e.schema.inputType}
                        label={e.schema.title}
                        helperText={e.schema.helper}
@@ -76,10 +76,10 @@ export const myRadio = (e) => {
         <Au>
             <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
                 <FormLabel>{e.schema.title}</FormLabel>
-                    {e.schema.items.enum.map(item => (
+                    {e.schema.items.enum.map((item, i) => (
                         <FormControlLabel
                             disabled={e.readonly || e.schema.editType !== undefined}
-                            key={item}
+                            key={i}
                             control={
                                 <Radio
                                     value={item}
@@ -99,9 +99,9 @@ export const myCheckboxes = (e) => {
         <Au>
             <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
                 <FormLabel>{e.schema.title}</FormLabel>
-                {e.schema.items.enum.map(item => (
+                {e.schema.items.enum.map((item, i) => (
                     <FormControlLabel
-                        key={item} disabled={e.readonly || e.schema.editType !== undefined}
+                        key={i} disabled={e.readonly || e.schema.editType !== undefined}
                         control={
                             <Checkbox
                               value={item}
@@ -124,8 +124,8 @@ export const mySelect = (e) => {
                 <Select value="f" style={{width: "100%"}}>
                     <MenuItem value="">Please select</MenuItem>
 
-                    {(e.schema.items !== undefined) ? e.schema.items.enum.map(item => (
-                        <MenuItem value={item} key={item}>{item}</MenuItem>
+                    {(e.schema.items !== undefined) ? e.schema.items.enum.map((item, i) => (
+                        <MenuItem value={item} key={i}>{item}</MenuItem>
                     )) : null}
                 </Select>
                <FormHelperText>{e.schema.helper}</FormHelperText>

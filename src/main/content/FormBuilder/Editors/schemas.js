@@ -19,7 +19,7 @@ export const longTextSchema =  {
     require: {type: "boolean", title: "Require", default: false},
     default: {type: "string", title: "Default Value"},
     placeholder: {type: "string", title: "Place Holder"},
-    rows: {type: "number", title: "rows"}
+    rows: {type: "integer", title: "rows", "maximum": 20, minimum: 3}
 };
 
 export const checkboxSchema =  {
@@ -48,7 +48,7 @@ export const radioGroupSchema =  {
 
 export const titleSchema = {
     helper: {type: "string", title: "Instructions for user"},
-    type: {type: "string", title: "Type",
+    inputType: {type: "string", title: "Type",
         "enum": [
             "Header 1",
             "Header 2",

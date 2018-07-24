@@ -9,12 +9,13 @@ import ListItemSecondaryAction from "@material-ui/core/es/ListItemSecondaryActio
 import Divider from "@material-ui/core/es/Divider/Divider";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 import ListSubheader from "@material-ui/core/es/ListSubheader/ListSubheader";
-import Typography from "@material-ui/core/es/Typography/Typography";
 import FieldWrapper from "./Editors/FieldWrapper";
 
-import * as mtd from "./FormElements/FormElements"
 import * as aC from "./store/actions/index";
 import {connect} from "react-redux";
+
+import * as mtd from "./FormElements/FormElements";
+import Typography from "@material-ui/core/es/Typography/Typography";
 
 const FieldList = (props) => {
 
@@ -56,21 +57,11 @@ const FieldList = (props) => {
         }
     };
 
-    const password = {
-        schema: {
-            type: "string",
-            "editType": "shortTextSchema"
-        },
-        uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myText()),
-            "type": "password"
-        }
-    };
-
     const longText = {
         schema: {
             "type": "string",
-            "editType": "longTextSchema"
+            "editType": "longTextSchema",
+            "rows": 3
         },
         uiSchema: {
             "ui:widget": (field) => fieldHelper(field, mtd.myText),
@@ -124,7 +115,7 @@ const FieldList = (props) => {
         uiSchema: {
             "ui:widget": (e) => {
                 return (
-                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
                         <Typography>{e.schema.title}</Typography>
                     </FieldWrapper>
                 );
@@ -139,23 +130,8 @@ const FieldList = (props) => {
         uiSchema: {
             "ui:widget": (e) => {
                 return (
-                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
                         <Divider/>
-                    </FieldWrapper>
-                );
-            }
-        }
-    };
-
-    const pageBreack = {
-        schema: {
-            "type": "string",
-        },
-        uiSchema: {
-            "ui:widget": (e) => {
-                return (
-                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
-                        <Divider style={{marginBottom: 10}} />
                     </FieldWrapper>
                 );
             }
@@ -169,7 +145,7 @@ const FieldList = (props) => {
         uiSchema: {
             "ui:widget": (e) => {
                 return (
-                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.remove}>
+                    <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
                         <img src=""/>
                     </FieldWrapper>
                 );
@@ -303,20 +279,20 @@ const FieldList = (props) => {
                 </ListItem>
                 <Divider component={'li'} />
 
-                <ListItem>
-                    <ListItemIcon>
-                        <Icon>border_top</Icon>
-                    </ListItemIcon>
-                    <ListItemText
-                        primary="Page break"
-                    />
-                    <ListItemSecondaryAction>
-                        <IconButton aria-label="Add" onClick={() => props.addField(pageBreack)} >
-                            <Icon>add</Icon>
-                        </IconButton>
-                    </ListItemSecondaryAction>
-                </ListItem>
-                <Divider component={'li'} />
+                {/*<ListItem>*/}
+                    {/*<ListItemIcon>*/}
+                        {/*<Icon>border_top</Icon>*/}
+                    {/*</ListItemIcon>*/}
+                    {/*<ListItemText*/}
+                        {/*primary="Page break"*/}
+                    {/*/>*/}
+                    {/*<ListItemSecondaryAction>*/}
+                        {/*<IconButton aria-label="Add" onClick={() => props.addField(pageBreack)} >*/}
+                            {/*<Icon>add</Icon>*/}
+                        {/*</IconButton>*/}
+                    {/*</ListItemSecondaryAction>*/}
+                {/*</ListItem>*/}
+                {/*<Divider component={'li'} />*/}
 
                 <ListItem>
                     <ListItemIcon>
@@ -331,7 +307,6 @@ const FieldList = (props) => {
                         </IconButton>
                     </ListItemSecondaryAction>
                 </ListItem>
-                <Divider component={'li'} />
 
             </List>
         </Card>
