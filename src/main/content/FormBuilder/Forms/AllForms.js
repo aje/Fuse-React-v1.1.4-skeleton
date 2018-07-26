@@ -19,21 +19,14 @@ import Grid from "@material-ui/core/es/Grid/Grid";
 import * as aC from "../store/actions";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import * as CT from "../FormElements/CustomTemplates";
+import Paper from "@material-ui/core/es/Paper/Paper";
+import Link from "@material-ui/icons/es/Link";
 
 const styles = theme => ({
     root         : {
         display: 'flex',
         flex   : '1'
-    },
-    searchWrapper: {
-        width                         : '100%',
-        height                        : 56,
-        padding                       : 18,
-        [theme.breakpoints.down('md')]: {
-            paddingLeft: 8
-        },
-        display                       : 'flex',
-        alignItems                    : 'center'
     },
     logoIcon         : {
         fontSize: '32px!important'
@@ -41,11 +34,14 @@ const styles = theme => ({
     logoText         : {
         fontSize: 24
     },
-    search       : {
-        paddingLeft: 16
-    },
     cardHeader: {
         padding: 0
+    },
+    addButton               : {
+        position: 'absolute',
+        right   : 12,
+        bottom  : 12,
+        zIndex  : 99
     }
 });
 class AllForms extends Component {
@@ -60,26 +56,38 @@ class AllForms extends Component {
         const t = this.state.modal;
         this.setState({ modal: !t });
     };
-
     openForm = (schema) => {
         this.handleModal();
         this.setState({currentForm: schema})
     };
     componentDidMount() {
+        this.getDate();
+    }
+
+    getDate = () => {
         axios.get('https://valued-mediator-138113.firebaseio.com/forms.json')
             .then((response)=>{
-                //console.log(response.data);
                 this.setState({forms: response.data, loaded: true});
-
             }).catch((error)=>{
-                console.log(error);
-            });
-    }
-    removeForm = (id) => {
-        console.log(id)
+            this.setState({loaded:true});
+            console.log(error);
+        });
     };
 
-    editFormHandle = (schema, uiSchema) => {
+    removeForm = (id) => {
+        this.setState({loaded: true});
+        axios.delete("https://valued-mediator-138113.firebaseio.com/forms/"+id+".json")
+            .then((res)=>{
+                this.setState({loaded: false});
+                this.getDate();
+            })
+            .catch((error)=>{
+                this.setState({loaded: false});
+                console.log(error)
+            })
+    };
+
+    editFormHandle = (schema, uiSchema, id) => {
         this.props.editForm(schema, uiSchema);
         this.props.history.push('/form-builder/edit-form')
     };
@@ -87,11 +95,17 @@ class AllForms extends Component {
     render() {
         const {classes} = this.props;
         let dataTable = null;
-        if(this.state.loaded &&  this.state.forms !== null) {
-            let data = Object.keys(this.state.forms).map((key)=>{
-                return this.state.forms[key]
-            });
-            //console.log(data)
+        if(this.state.loaded) {
+            let data = [];
+            let ids = [];
+            if(this.state.forms !== null) {
+
+                data = Object.keys(this.state.forms).map((key)=>{
+                    ids.push(key);
+                    return this.state.forms[key]
+                });
+            }
+
             dataTable = <ReactTable
                 data={data}
                 autoGenerateColumns={ false }
@@ -110,7 +124,7 @@ class AllForms extends Component {
 
                     {
                         Header  : "Title",
-                        Cell: row => row.original.schema.title
+                        Cell: row => row.original.schema.title,
                     },
                     {
                         Header  : "Description",
@@ -119,8 +133,8 @@ class AllForms extends Component {
                     },
                     {
                         Header: "",
-                        width : 128,
-                        Cell  : row => (
+                        width : 150,
+                        Cell  : (row, index) => (
                             <div className="flex items-center">
                                 <IconButton
                                     onClick={(ev) => {
@@ -137,7 +151,17 @@ class AllForms extends Component {
                                 <IconButton
                                     onClick={(ev) => {
                                         ev.stopPropagation();
-                                        this.removeForm(row.original.id);
+                                        //console.log(row)
+                                        this.editFormHandle(row.original.schema,row.original.uiSchema,ids[row.index])
+                                    }}
+                                >
+                                    <Icon>edit</Icon>
+                                </IconButton>
+                                <IconButton
+                                    onClick={(ev) => {
+                                        ev.stopPropagation();
+                                        //console.log(ids[row.index]);
+                                        this.removeForm(ids[row.index]);
                                     }}
                                 >
                                     <Icon>delete</Icon>
@@ -147,30 +171,26 @@ class AllForms extends Component {
                     }
 
                 ]}
+                noDataText="No forms found!"
                 defaultPageSize={10}
                 className="-striped -highlight"
             />
         }
+
         let uiSchema = {};
         let schema = {};
         if(this.state.currentForm.schema !== undefined) {
-
-             Object.keys(this.state.currentForm.uiSchema).map((key)=>{
+            Object.keys(this.state.currentForm.uiSchema).map((key)=>{
                  uiSchema[key] = {...this.state.currentForm.uiSchema[key],"ui:widget": mtd[this.state.currentForm.uiSchema[key].type]}
             });
-
-             schema = {...this.state.currentForm.schema};
+            schema = {...this.state.currentForm.schema};
             Object.keys(schema.properties).map(key => {
                 delete schema.properties[key].editType;
             });
-            // console.log(schema);
-            //console.log(uiSchema)
         }
 
         const ObjectFieldTemplate = (e) =>{
-            // console.log(e.properties);
             const elements = e.properties.map((element, i) => {
-                //console.log(element.content.props.schema.grid)
                 return <Grid item key={i} xs={element.content.props.schema.grid ? element.content.props.schema.grid : 12}>{element.content}</Grid>;
             });
 
@@ -188,11 +208,6 @@ class AllForms extends Component {
                         </Grid>
                 </Au>
             );
-        };
-
-        const CustomFieldTemplate = (e) => {
-            const {id, className, label, help, required, description, errors, children} = e;
-            return <div >{children}</div>;
         };
 
         return (
@@ -213,8 +228,11 @@ class AllForms extends Component {
                 content={
                     <div className="p-24">
                         <FuseAnimate animation="transition.slideLeftIn" delay={200}>
-                            <div>{dataTable}</div>
+                            <div>
+                                {this.state.loaded ? dataTable : <Paper style={{height: 200}} className={"loading"}></Paper>}
+                                </div>
                         </FuseAnimate>
+
                         <Dialog
                             open={this.state.modal}
                             onClose={this.handleModal}
@@ -223,7 +241,7 @@ class AllForms extends Component {
                                     {/*<DialogTitle id="alert-dialog-title">{this.state.currentFormSchema.schema.title}</DialogTitle>*/}
                                     <DialogContent>
                                         <Form schema={schema}
-                                              FieldTemplate={CustomFieldTemplate}
+                                              FieldTemplate={CT.CustomFieldTemplate}
                                               uiSchema={uiSchema}
                                               ObjectFieldTemplate={ObjectFieldTemplate}
                                         ><div></div></Form>
@@ -242,6 +260,20 @@ class AllForms extends Component {
                             </DialogActions>
 
                         </Dialog>
+                        <FuseAnimate animation="transition.expandIn" delay={300}>
+                            <Button
+                                variant="fab"
+                                color="primary"
+                                aria-label="add"
+                                className={classes.addButton}
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                    this.props.history.push('/form-builder/add-form')
+                                }}
+                            >
+                                <Icon>note_add</Icon>
+                            </Button>
+                        </FuseAnimate>
                     </div>
                 }>
             </FusePageSimple>

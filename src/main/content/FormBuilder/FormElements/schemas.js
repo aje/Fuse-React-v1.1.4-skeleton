@@ -1,138 +1,144 @@
-import * as mtd from "./FormElements";
-import FieldWrapper from "../Editors/FieldWrapper";
-import Divider from "@material-ui/core/es/Divider/Divider";
 import React from "react";
 
-const fieldHelper = (field, el) => {
-    return (
-        <FieldWrapper field={field} changeEditor={props.changeEditor} remove={props.removeField}>
-            {el(field)}
-        </FieldWrapper>
-    )
-};
-
-export const checkbox = {
-    schema: {
-        type: "array",
-        "items": {
-            "type": "string",
-            "enum": [
-                "foo",
-                "bar",
-                "fuzz"
-            ]
+export const schemas = {
+    "BASIC WIDGETS" : {
+        shortText: {
+            icon: "short_text",
+            title: "Short text",
+            schema: {
+                type: "string",
+                "editType": "shortTextSchema",
+                "inputType": "text"
+            },
+            uiSchema: {
+                "type": "myText"
+            }
         },
-        "uniqueItems": true,
-        "editType": "checkboxSchema"
-    },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.myCheckboxes)
-    },
-
-};
-
-export const shortText = {
-    schema: {
-        type: "string",
-        "editType": "shortTextSchema"
-    },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.myText)
-    }
-};
-
-export const longText = {
-    schema: {
-        "type": "string",
-        "editType": "longTextSchema"
-    },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.myText),
-    }
-};
-
-export const date = {
-    schema: {
-        "type": "string",
-        "format": "date-time"
-    },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.myDate),
-    }
-};
-
-export const radioGroup = {
-    schema: {
-        type: "array",
-        "items": {
-            "type": "string",
-            "enum": [
-                "foo",
-                "bar",
-                "fuzz"
-            ]
+        longText: {
+            icon: "notes",
+            title: "Long text",
+            schema: {
+                "type": "string",
+                "editType": "longTextSchema",
+                "rows": 3,
+                "textarea": true
+            },
+            uiSchema: {
+                "type": "myText"
+            }
         },
-        "uniqueItems": true,
-        "editType": "radioGroupSchema"
-    },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.myRadio)
-    }
-};
+        checkbox: {
+            icon: "playlist_add_check",
+            title: "Checkbox group",
+            schema: {
+                type: "array",
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "foo",
+                        "bar",
+                        "fuzz"
+                    ]
+                },
+                "uniqueItems": true,
+                "editType": "checkboxSchema"
+            },
+            uiSchema: {
+                "type": "myCheckboxes"
+            },
 
-export const select = {
-    schema: {
-        "type": "string",
-        "editType": "radioGroupSchema"
+        },
+        radioGroup: {
+            icon: "format_list_bulleted",
+            title: "Radio group",
+            schema: {
+                type: "array",
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        "foo",
+                        "bar",
+                        "fuzz"
+                    ]
+                },
+                "uniqueItems": true,
+                "editType": "radioGroupSchema"
+            },
+            uiSchema: {
+                "type": "myRadio"
+            }
+        },
+        date: {
+            icon: "date_range",
+            title: "Date & Time",
+            schema: {
+                "type": "string",
+                "format": "date-time",
+                "editType": "dateTime",
+                inputType: "datetime-local"
+            },
+            uiSchema: {
+                "type": "myDate"
+            }
+        },
+        select: {
+            icon: "arrow_drop_down_circle",
+            title: "Select list",
+            schema: {
+                "type": "string",
+                "editType": "radioGroupSchema"
+            },
+            uiSchema: {
+                "type": "mySelect"
+            }
+        },
+        fileUpload: {
+            icon: "cloud_upload",
+            title: "File upload",
+            schema: {
+                "type": "string",
+                "format": "data-url",
+                "editType": "fileUploadSchema",
+                "maximum": 0,
+            },
+            uiSchema: {
+                "type": "fileUpload"
+            }
+        }
     },
-    uiSchema: {
-        "ui:widget": (field) => fieldHelper(field, mtd.mySelect)
-    }
-};
-
-export const staticText = {
-    schema: {
-        "type": "string",
-        "editType": "titleSchema"
-    },
-    uiSchema: {
-        "ui:widget": (e) => {
-            return (
-                <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
-                    <Typography>{e.schema.title}</Typography>
-                </FieldWrapper>
-            );
+    "AUXILIARY WIDGETS" : {
+        staticText: {
+            icon: "notes",
+            title: "Static text",
+            schema: {
+                "type": "string",
+                "editType": "titleSchema"
+            },
+            uiSchema: {
+                "type": "staticText"
+            }
+        },
+        selectionBreak: {
+            icon: "border_horizontal",
+            title: "Selection Break",
+            schema: {
+                "type": "string",
+            },
+            uiSchema: {
+                "type": "staticBreak"
+            }
+        },
+        staticImage: {
+            icon: "add_photo_alternate",
+            title: "Static Image",
+            schema: {
+                "type": "string",
+                "editType": "imgSchema"
+            },
+            uiSchema: {
+                "type": "staticImg"
+            },
+            type: "staticImage"
         }
     }
-};
-
-export const selectionBreak = {
-    schema: {
-        "type": "string",
-    },
-    uiSchema: {
-        "ui:widget": (e) => {
-            return (
-                <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
-                    <Divider/>
-                </FieldWrapper>
-            );
-        }
-    }
-};
-
-const staticImage = {
-    schema: {
-        "type": "string",
-    },
-    uiSchema: {
-        "ui:widget": (e) => {
-            return (
-                <FieldWrapper field={e} changeEditor={props.changeEditor} remove={props.removeField}>
-                    <img src=""/>
-                </FieldWrapper>
-            );
-        }
-    },
-    type: "staticImage"
 };

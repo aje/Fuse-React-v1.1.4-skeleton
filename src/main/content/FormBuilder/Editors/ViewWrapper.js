@@ -5,14 +5,13 @@ import {connect} from "react-redux";
 import Button from "@material-ui/core/es/Button/Button";
 import axios from "axios";
 import Paper from "@material-ui/core/es/Paper/Paper";
-import {withStyles} from "@material-ui/core/styles/index";
 import * as Actions from "../store/actions";
 import CardActions from "@material-ui/core/es/CardActions/CardActions";
 import * as mtd from "../FormElements/FormElements";
 import * as CT from "../FormElements/CustomTemplates";
 import * as fuseActions from "store/actions";
 import FieldWrapper from "./FieldWrapper";
-import loadingGif from "../../../../styles/loading.gif"
+import withRouter from "react-router-dom/es/withRouter";
 
 class ViewWrapper extends Component{
 
@@ -31,10 +30,11 @@ class ViewWrapper extends Component{
                 this.props.showMessage({
                     message     : 'Form Saved!',
                     anchorOrigin: {
-                        vertical  : 'top',
+                        vertical  : 'bottom',
                         horizontal: 'right'
                     }
                 })
+                this.props.history.push('/form-builder/forms')
             }).catch((error) => {
                 this.setState({loading: false})
             })
@@ -106,4 +106,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default (connect(mapStateToProps,mapDispatchToProps)(ViewWrapper));
+export default withRouter((connect(mapStateToProps,mapDispatchToProps)(ViewWrapper)));

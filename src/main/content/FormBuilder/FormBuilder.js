@@ -13,6 +13,7 @@ import Editor from "./Editors/Editor";
 import {connect} from 'react-redux';
 import * as Actions from './store/actions/index'
 import FieldList from "./FieldList";
+import withRouter from "react-router-dom/es/withRouter";
 const styles = theme => ({
     root         : {
         display: 'flex',
@@ -58,7 +59,8 @@ class FormBuilder extends Component {
     };
 
     componentDidMount = () => {
-        //this.props.clearForm();
+        if(this.props.history.location.pathname === '/form-builder/add-form')
+        this.props.clearForm();
     };
 
     render(){
@@ -71,10 +73,16 @@ class FormBuilder extends Component {
                 header={
                     <div className={classNames(classes.root, "p-24")}>
                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Icon className={classNames(classes.logoIcon, "mr-16")}>note_add</Icon>
+                            <Icon className={classNames(classes.logoIcon, "mr-16")}>
+                                {this.props.history.location.pathname === '/form-builder/add-form' ?
+                                "note_add" : "edit"}
+                            </Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
-                            <span className={classNames(classes.logoText)}>Create new form</span>
+                            <span className={classNames(classes.logoText)}>
+                                {this.props.history.location.pathname === '/form-builder/add-form' ?
+                                    "Create new form" : "Edit form"}
+                            </span>
                         </FuseAnimate>
                     </div>
                 }
@@ -115,4 +123,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(FormBuilder));
+export default withRouter(withStyles(styles, {withTheme: true})(connect(null, mapDispatchToProps)(FormBuilder)));

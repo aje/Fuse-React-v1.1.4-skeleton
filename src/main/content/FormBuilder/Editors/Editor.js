@@ -55,7 +55,8 @@ class Editor  extends Component{
                     placeholder: item.placeholder,
                     require: this.props.item.required || item.require,
                     inputType: item.inputType,
-                    rows: item.rows
+                    rows: item.rows,
+                    maximum: item.maximum
                 };
 
                 console.log(item.items);
@@ -76,6 +77,9 @@ class Editor  extends Component{
                     "rows": {
                         "ui:widget": "range"
                     },
+                    "maximum": {
+                        "ui:widget": "range"
+                    }
 
                 };
                 this.setState({uiSchema: tUiSchema});

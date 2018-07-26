@@ -1,5 +1,6 @@
 import FormBuilder from './FormBuilder';
 import AllForms from "./Forms/AllForms";
+import {authRoles} from 'auth/auth';
 
 export const FormBuilderConfig = {
     settings: {
@@ -12,6 +13,7 @@ export const FormBuilderConfig = {
             }
         }
     },
+   //auth    : authRoles.admin,//['admin']
     routes  : [
         {
             path     : '/form-builder/add-form',

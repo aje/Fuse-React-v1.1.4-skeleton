@@ -84,7 +84,8 @@ const editField = (state, action) => {
         require: action.data.require,
         inputType: action.data.inputType,
         rows: action.data.rows,
-        src: action.data.src
+        src: action.data.src,
+        maximum: action.data.maximum
     };
 
     if (action.data.options !== undefined) {

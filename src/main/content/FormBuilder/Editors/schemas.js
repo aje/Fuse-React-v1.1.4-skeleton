@@ -68,6 +68,12 @@ export const imgSchema = {
     src: {type: "string", title: "Image src","format": "data-url"},
 };
 
+export const fileUploadSchema = {
+    helper: {type: "string", title: "Instructions for user"},
+    require: {type: "boolean", title: "Require", default: false},
+    maximum: {type: "integer", title: "Max file size (MB)", "maximum": 200, minimum: 0}
+};
+
 export const dateTime = {
     helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},

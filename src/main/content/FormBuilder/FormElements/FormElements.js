@@ -13,6 +13,8 @@ import FormHelperText from "@material-ui/core/es/FormHelperText/FormHelperText";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import InputAdornment from "@material-ui/core/es/InputAdornment/InputAdornment";
 import Icon from "@material-ui/core/es/Icon/Icon";
+import FieldWrapper from "../Editors/FieldWrapper";
+import Divider from "@material-ui/core/es/Divider/Divider";
 
 
 export const myText = (e) => {
@@ -154,6 +156,46 @@ export const mySelect = (e) => {
            </FormControl>
        </Au>
     )
+};
+
+export const staticText = (e) => {
+    return (
+            <Typography variant={e.schema.inputType}>{e.schema.title}</Typography>
+        )
+};
+
+export const staticBreak = (e) => {
+    return (
+        <Divider/>
+        )
+};
+
+export const staticImg = (e) => {
+    return (
+        <Au>
+            <Typography>{e.schema.title}</Typography>
+            <img src={e.schema.src}/>
+        </Au>
+        )
+};
+
+export const fileUpload = (e) => {
+    return (
+        <Au>
+            <TextField fullWidth
+                       disabled={e.readonly || e.schema.editType !== undefined}
+                       required={e.required}
+                       type={"file"}
+                       label={e.schema.title}
+                       helperText={e.schema.helper}
+                       defaultValue={e.schema.default}
+                       placeholder={e.schema.placeholder}
+                       InputLabelProps={{
+                           shrink: true,
+                       }}
+            />
+        </Au>
+        )
 };
 //
 // export const myCheckbox = (e) =>{

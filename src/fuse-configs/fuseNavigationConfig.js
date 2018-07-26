@@ -24,14 +24,14 @@ export const fuseNavigationConfig = [
                 'id'   : 'add-form',
                 'title': 'Add New Form',
                 'type' : 'item',
-                'icon' : 'drag_indicator',
+                'icon' : 'note_add',
                 'url'  : '/form-builder/add-form',
             },
             {
                 'id'   : 'all-forms',
                 'title': 'All Forms',
                 'type' : 'item',
-                'icon' : 'drag_indicator',
+                'icon' : 'vertical_split',
                 'url'  : '/form-builder/forms',
             }
         ]
