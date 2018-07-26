@@ -77,7 +77,7 @@ class ViewWrapper extends Component{
                     >
                         <Paper square elevation={1}>
                             <CardActions>
-                                <Button variant="contained" color={"primary"} onClick={this.saveForm}>Save form</Button>
+                                <Button variant="contained" disabled={Object.keys(this.props.formSchema.properties).length === 0} color={"primary"} onClick={this.saveForm}>Save form</Button>
                                 <Button variant="contained" color={"secondary"}
                                         onClick={this.props.clearForm}>Clear</Button>
                             </CardActions>

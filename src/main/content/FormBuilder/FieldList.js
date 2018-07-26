@@ -49,15 +49,6 @@ const FieldList = (props) => {
     )
 };
 
-//
-// function mapDispatchToProps(dispatch)
-// {
-//     return bindActionCreators({
-//         add: Actions.ADD_FIELD,
-//         removeField: Actions.REMOVE_FIELD
-//     }, dispatch);
-// }
-
 
 const mapDispatchToProps = dispatch => {
     return {
@@ -66,11 +57,4 @@ const mapDispatchToProps = dispatch => {
         changeGrid: (field, grid)  => dispatch(aC.changeGrid(field, grid)),
     };
 };
-//
-// function mapStateToProps({formBuilderRedux})
-// {
-//     return {
-//         state: formBuilderRedux.state
-//     }
-// }
 export default connect(null, mapDispatchToProps)(FieldList);

@@ -70,7 +70,7 @@ class AllForms extends Component {
                 this.setState({forms: response.data, loaded: true});
             }).catch((error)=>{
             this.setState({loaded:true});
-            console.log(error);
+                console.log(error);
         });
     };
 

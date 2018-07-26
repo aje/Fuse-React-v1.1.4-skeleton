@@ -18,7 +18,7 @@ const initialState = {
 
 const addField = (state, action) => {
     // create a temp for schema and uiSchema
-    console.log(action.field);
+    //console.log(action.field);
     const schema = {...state.schema};
     schema.properties = {...state.schema.properties};
 
