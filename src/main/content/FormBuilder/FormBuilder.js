@@ -57,6 +57,10 @@ class FormBuilder extends Component {
         this.setState({currentItem: item});
     };
 
+    componentDidMount = () => {
+        //this.props.clearForm();
+    };
+
     render(){
         const {classes} = this.props;
         return (
@@ -107,6 +111,7 @@ const mapDispatchToProps = dispatch => {
     return {
         addField: ( field) => dispatch(Actions.addField(field)),
         removeField: (field) => dispatch(Actions.removeField(field)),
+        clearForm: () => dispatch(Actions.clearForm()),
     };
 };
 

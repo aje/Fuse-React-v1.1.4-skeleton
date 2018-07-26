@@ -7,12 +7,15 @@ import Form from "react-jsonschema-form";
 import * as schemas from "./schemas"
 import {connect} from "react-redux";
 import * as aC from "../store/actions";
+import Au from "../../../../hoc/Au";
 
 const styles = theme => ({
     cardHeader: {
-        backgroundColor: theme.palette.primary[500]
+        backgroundColor: theme.palette.primary[500],
+        padding: 10
     },
     cardTitle: {
+        fontSize: 16,
         color: "white"
     }
 });
@@ -21,14 +24,16 @@ class Editor  extends Component{
     state = {
         schema : {
             "type": "object",
-            properties: {
-
-            }
+            properties: {}
         },
         formData:{
             label: "title"
         },
-        t : 1
+        formDetailData: {
+            title: this.props.formSchema.title,
+            desc: this.props.formSchema.description,
+            action: this.props.formSchema.action
+        },
     };
 
     componentDidUpdate = () => {
@@ -86,24 +91,56 @@ class Editor  extends Component{
         this.setState({formData: formData});
     };
 
+    onEditFormDetail = ({formData}) => {
+        this.props.editFormDetails(formData);
+        this.setState({formDetailData: formData});
+    };
+
     render() {
         const {classes} = this.props;
+
+        const formDetailSchema = {
+            type: "object",
+            properties: {
+                title: {type: "string", title: "Title"},
+                desc: {type: "string", title: "Description"},
+                action: {type: "string", title: "Form Action"}
+            }
+        };
         return (
-            <Card>
-                <CardHeader
-                    classes={{root: classes.cardHeader, title: classes.cardTitle}}
-                    title={"Edit " + (this.props.item.schema !== undefined ? this.props.item.schema.title : "Choose one")}
-                />
+            <Au>
 
-                <CardContent>
-
-                    <Form schema={(this.state.schema)}
-                          formData={this.state.formData}
-                          uiSchema={this.state.uiSchema}
-                          onChange={this.onSubmit}
+                <Card>
+                    <CardHeader
+                        classes={{root: classes.cardHeader, title: classes.cardTitle}}
+                        title={"Edit " + (this.props.item.schema !== undefined ? this.props.item.schema.title : "Choose one")}
                     />
-                </CardContent>
-            </Card>
+
+                    <CardContent>
+
+                        <Form schema={(this.state.schema)}
+                              formData={this.state.formData}
+                              uiSchema={this.state.uiSchema}
+                              onChange={this.onSubmit}
+                        ><div></div></Form>
+                    </CardContent>
+                </Card><br/>
+
+                <Card>
+                    <CardHeader
+                        classes={{root: classes.cardHeader, title: classes.cardTitle}}
+                        title={"Form Detail"}
+                    />
+
+                    <CardContent>
+                        <Form schema={formDetailSchema}
+                              formData={this.state.formDetailData}
+                            //uiSchema={this.state.uiSchema}
+                              onChange={this.onEditFormDetail}
+                        ><div></div></Form>
+                    </CardContent>
+                </Card>
+            </Au>
         )
     }
 }
@@ -111,6 +148,7 @@ class Editor  extends Component{
 const mapDispatchToProps = dispatch => {
     return {
         editField: (field,data) => dispatch(aC.editField(field,data)),
+        editFormDetails: (data) => dispatch(aC.editFormDetails(data)),
     };
 };
 

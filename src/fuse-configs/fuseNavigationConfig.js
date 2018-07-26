@@ -11,13 +11,28 @@ export const fuseNavigationConfig = [
                 'type' : 'item',
                 'icon' : 'whatshot',
                 'url'  : '/example'
-            },
+            }
+        ]
+    },
+    {
+        'id'      : 'formBuilder',
+        'title'   : 'Form Builder',
+        'type'    : 'group',
+        'icon'    : 'apps',
+        'children': [
             {
-                'id'   : 'from-builder',
-                'title': 'Form builder',
+                'id'   : 'add-form',
+                'title': 'Add New Form',
                 'type' : 'item',
                 'icon' : 'drag_indicator',
-                'url'  : '/form-builder'
+                'url'  : '/form-builder/add-form',
+            },
+            {
+                'id'   : 'all-forms',
+                'title': 'All Forms',
+                'type' : 'item',
+                'icon' : 'drag_indicator',
+                'url'  : '/form-builder/forms',
             }
         ]
     }

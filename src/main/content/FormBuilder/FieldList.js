@@ -21,7 +21,7 @@ const FieldList = (props) => {
 
     const fieldHelper = (field, el) => {
         return (
-            <FieldWrapper field={field} changeEditor={props.changeEditor} remove={props.removeField}>
+            <FieldWrapper field={field} changeGrid={props.changeGrid} changeEditor={props.changeEditor} remove={props.removeField}>
                 {el(field)}
             </FieldWrapper>
         )
@@ -42,7 +42,8 @@ const FieldList = (props) => {
             "editType": "checkboxSchema"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myCheckboxes)
+            //"ui:widget": (field) => fieldHelper(field, mtd.myCheckboxes),
+            "type": "myCheckboxes"
         },
 
     };
@@ -50,10 +51,12 @@ const FieldList = (props) => {
     const shortText = {
         schema: {
             type: "string",
-            "editType": "shortTextSchema"
+            "editType": "shortTextSchema",
+            "inputType": "text"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myText)
+            //"ui:widget": (field) => fieldHelper(field, mtd.myText),
+            "type": "myText"
         }
     };
 
@@ -61,10 +64,12 @@ const FieldList = (props) => {
         schema: {
             "type": "string",
             "editType": "longTextSchema",
-            "rows": 3
+            "rows": 3,
+            "textarea": true
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myText),
+            //"ui:widget": (field) => fieldHelper(field, mtd.myText),
+            "type": "myText"
         }
     };
 
@@ -73,9 +78,11 @@ const FieldList = (props) => {
             "type": "string",
             "format": "date-time",
             "editType": "dateTime",
+            inputType: "datetime-local"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myDate),
+            //"ui:widget": (field) => fieldHelper(field, mtd.myDate),
+            "type": "myDate"
         }
     };
 
@@ -94,7 +101,8 @@ const FieldList = (props) => {
             "editType": "radioGroupSchema"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.myRadio)
+            //"ui:widget": (field) => fieldHelper(field, mtd.myRadio),
+            "type": "myRadio"
         }
     };
 
@@ -104,7 +112,8 @@ const FieldList = (props) => {
             "editType": "radioGroupSchema"
         },
         uiSchema: {
-            "ui:widget": (field) => fieldHelper(field, mtd.mySelect)
+            //"ui:widget": (field) => fieldHelper(field, mtd.mySelect),
+            "type": "mySelect"
         }
     };
 
@@ -330,6 +339,7 @@ const mapDispatchToProps = dispatch => {
     return {
         addField: (field) => dispatch(aC.addField(field)),
         removeField: (field) => dispatch(aC.removeField(field)),
+        changeGrid: (field, grid)  => dispatch(aC.changeGrid(field, grid)),
     };
 };
 //

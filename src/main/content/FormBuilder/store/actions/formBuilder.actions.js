@@ -21,3 +21,32 @@ export const editField = (field, data) => {
         data: data
     }
 };
+
+export const editFormDetails = (data) => {
+    return {
+        type   : aC.EDIT_FORM_DETAIL,
+        data: data
+    }
+};
+
+export const clearForm = () => {
+    return {
+        type   : aC.CLEAR_FORM,
+    }
+};
+
+export const changeGrid = (field,grid) => {
+    return {
+        type   : aC.CHANGE_GRID,
+        field: field,
+        grid: grid
+    }
+};
+
+export const editForm = (schema,uiSchema) => {
+    return {
+        type   : aC.EDIT_FORM,
+        schema: schema,
+        uiSchema: uiSchema,
+    }
+};

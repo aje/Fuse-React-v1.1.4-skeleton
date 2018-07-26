@@ -36,7 +36,7 @@ export const myText = (e) => {
             <TextField fullWidth
                        disabled={e.readonly || e.schema.editType !== undefined}
                        required={e.required}
-                       multiline={(e.schema["editType"] === "longTextSchema")}
+                       multiline={(e.schema.textarea)}
                        rows={e.schema.rows}
                        type={e.schema.inputType}
                        label={e.schema.title}
@@ -56,6 +56,19 @@ export const myText = (e) => {
 };
 
 export const myDate = (e) => {
+    let icon = false;
+    switch (e.schema.inputType) {
+        case "date":
+            icon = "calendar_today";
+            break;
+        case "time":
+            icon = "access_time";
+            break;
+        case "datetime-local":
+            icon = "date_range";
+            break;
+            break;
+    }
     return (
         <Au>
             <TextField fullWidth
@@ -68,12 +81,14 @@ export const myDate = (e) => {
                        placeholder={e.schema.placeholder}
                        InputLabelProps={{
                            shrink: true,
+                       }}
+                       InputProps={icon ? {
                            startAdornment: (
                                <InputAdornment position="start">
-                                   <Icon>date_range</Icon>
+                                   <Icon>{icon}</Icon>
                                </InputAdornment>
-                           )
-                       }}
+                           ),
+                       }: null }
             />
         </Au>
     )
@@ -96,7 +111,7 @@ export const myRadio = (e) => {
                             label={item}
                         />
                     ))}
-                <FormHelperText>{e.schema.helper}</FormHelperText>
+                {e.schema.helper !== undefined? <FormHelperText>{e.schema.helper}</FormHelperText> : ""}
             </FormControl>
         </Au>
     )
@@ -118,7 +133,7 @@ export const myCheckboxes = (e) => {
                         label={item}
                     />
                 ))}
-                <FormHelperText>{e.schema.helper}</FormHelperText>
+                {e.schema.helper !== undefined? <FormHelperText>{e.schema.helper}</FormHelperText> : ""}
             </FormControl>
         </Au>
     )
@@ -127,7 +142,7 @@ export const myCheckboxes = (e) => {
 export const mySelect = (e) => {
     return (
        <Au>
-           <FormControl required={e.required} fullWidth disabledf={e.readonly || e.schema.editType !== undefined}>
+           <FormControl required={e.required} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
                <InputLabel>{e.schema.title}</InputLabel>
                 <Select value="f" style={{width: "100%"}}>
                     <MenuItem value="f">Please select</MenuItem>
@@ -135,7 +150,7 @@ export const mySelect = (e) => {
                         <MenuItem value={item} key={i}>{item}</MenuItem>
                     )) : null}
                 </Select>
-               <FormHelperText>{e.schema.helper}</FormHelperText>
+               {e.schema.helper !== undefined? <FormHelperText>{e.schema.helper}</FormHelperText> : ""}
            </FormControl>
        </Au>
     )

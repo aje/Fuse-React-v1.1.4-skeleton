@@ -6,8 +6,8 @@ const initialState = {
     formDescription: "",
     currentIndex: 0,
     schema : {
-        // title: "Untitled form",
-        // description: "Enter some description for your form here",
+        title: "Untitled form",
+        description: "Enter some description for your form here",
         "type": "object",
         "properties": {},
         "required": [],
@@ -18,7 +18,7 @@ const initialState = {
 
 const addField = (state, action) => {
     // create a temp for schema and uiSchema
-    //console.log();
+    console.log(action.field);
     const schema = {...state.schema};
     schema.properties = {...state.schema.properties};
 
@@ -111,12 +111,58 @@ const editField = (state, action) => {
     };
 };
 
+const editFormDetails = (state, action) => {
+    const schema = {...state.schema};
+    schema.title = action.data.title;
+    schema.description = action.data.desc;
+    return {
+        ...state,
+        schema
+    }
+};
+
+const clearForm = (state) => {
+    const schema = {...initialState.schema};
+    const currentIndex= 0;
+    return {
+        ...state,
+        schema,
+        currentIndex
+    }
+};
+
+const changeGrid = (state, action) => {
+    const schema = {...state.schema};
+    schema.properties = {...state.schema.properties};
+    schema.properties[action.field] = {...state.schema.properties[action.field], grid : action.grid};
+    return {
+        ...state,
+        schema
+    }
+};
+
+const editForm = (state, action) => {
+    const schema = {...action.schema};
+    const uiSchema = {...action.uiSchema};
+    //schema.properties = {...state.schema.properties};
+    // schema.properties[action.field] = {...state.schema.properties[action.field], grid : action.grid};
+    return {
+        ...state,
+        schema,
+        uiSchema
+    }
+};
+
 const formBuilder = (state = initialState, action) => {
     switch ( action.type )
     {
         case aC.ADD_FIELD: {return addField(state, action)}
         case aC.REMOVE_FIELD: {return removeField(state, action)}
         case aC.EDIT_FIELD: {return editField(state, action)}
+        case aC.EDIT_FORM_DETAIL: {return editFormDetails(state, action)}
+        case aC.CLEAR_FORM: {return clearForm(state)}
+        case aC.CHANGE_GRID: {return changeGrid(state, action)}
+        case aC.EDIT_FORM: {return editForm(state, action)}
         default:
         {
             return state;

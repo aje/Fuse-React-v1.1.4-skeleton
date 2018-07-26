@@ -1,4 +1,5 @@
 import FormBuilder from './FormBuilder';
+import AllForms from "./Forms/AllForms";
 
 export const FormBuilderConfig = {
     settings: {
@@ -13,8 +14,16 @@ export const FormBuilderConfig = {
     },
     routes  : [
         {
-            path     : '/form-builder',
+            path     : '/form-builder/add-form',
             component: FormBuilder
+        },
+        {
+            path     : '/form-builder/edit-form',
+            component: FormBuilder
+        },
+        {
+            path     : '/form-builder/forms',
+            component: AllForms
         }
     ]
 };

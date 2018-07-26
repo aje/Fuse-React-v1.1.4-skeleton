@@ -1,5 +1,9 @@
 export  {
     addField,
     removeField,
-    editField
+    editField,
+    clearForm,
+    changeGrid,
+    editForm,
+    editFormDetails
 } from './formBuilder.actions';
