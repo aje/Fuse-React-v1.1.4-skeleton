@@ -21,7 +21,7 @@ const styles = theme => ({
     closeBtn: {
         position: "absolute",
         top: "-20px",
-        right: "-20px",
+        right: "5px",
         width: 36,
         height: 36,
         zIndex: 99
@@ -29,7 +29,7 @@ const styles = theme => ({
     changeBtn: {
         position: "absolute",
         top: "-20px",
-        right: "20px",
+        right: "50px",
         width: 36,
         height: 36,
         zIndex: 99

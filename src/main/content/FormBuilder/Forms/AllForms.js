@@ -152,11 +152,18 @@ class AllForms extends Component {
             />
         }
         let uiSchema = {};
+        let schema = {};
         if(this.state.currentForm.schema !== undefined) {
 
              Object.keys(this.state.currentForm.uiSchema).map((key)=>{
                  uiSchema[key] = {...this.state.currentForm.uiSchema[key],"ui:widget": mtd[this.state.currentForm.uiSchema[key].type]}
             });
+
+             schema = {...this.state.currentForm.schema};
+            Object.keys(schema.properties).map(key => {
+                delete schema.properties[key].editType;
+            });
+            // console.log(schema);
             //console.log(uiSchema)
         }
 
@@ -215,7 +222,7 @@ class AllForms extends Component {
                             {this.state.currentForm.schema !== undefined ? <Au>
                                     {/*<DialogTitle id="alert-dialog-title">{this.state.currentFormSchema.schema.title}</DialogTitle>*/}
                                     <DialogContent>
-                                        <Form schema={this.state.currentForm.schema}
+                                        <Form schema={schema}
                                               FieldTemplate={CustomFieldTemplate}
                                               uiSchema={uiSchema}
                                               ObjectFieldTemplate={ObjectFieldTemplate}

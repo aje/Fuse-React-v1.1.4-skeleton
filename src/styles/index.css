@@ -55,6 +55,8 @@ a[role=button] {
     text-decoration: none;
 }
 
+
+
 @import 'print.css';
 
 @import 'tables.css';
@@ -64,3 +66,33 @@ a[role=button] {
 @import 'prism.css';
 
 @import 'fuse-helpers.css';
+
+.cardHeader {
+    background-color: #3C4252
+
+}
+.cardTitle {
+    color: white;
+}
+.text-lighter {
+    color: #ccc;
+}
+.loading {
+    position: relative;
+}
+.loading:before {
+    content: "";
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("loading.gif");
+    display: block;
+    position: absolute;
+    background-position: center center;
+    -webkit-background-size: 60px 60px;
+    background-size: 50px 50px;
+    background-color: rgba(255,255,255,.7);
+    z-index: 100;
+    background-repeat: no-repeat;
+}
