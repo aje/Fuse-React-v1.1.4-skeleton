@@ -15,6 +15,8 @@ import InputAdornment from "@material-ui/core/es/InputAdornment/InputAdornment";
 import Icon from "@material-ui/core/es/Icon/Icon";
 import FieldWrapper from "../Editors/FieldWrapper";
 import Divider from "@material-ui/core/es/Divider/Divider";
+import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
+import {Component} from "react";
 
 
 export const myText = (e) => {
@@ -96,27 +98,44 @@ export const myDate = (e) => {
     )
 };
 
-export const myRadio = (e) => {
-    return (
-        <Au>
-            <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
-                <FormLabel>{e.schema.title}</FormLabel>
-                    {e.schema.items.enum.map((item, i) => (
-                        <FormControlLabel
-                            disabled={e.readonly || e.schema.editType !== undefined}
-                            key={i}
-                            control={
-                                <Radio
-                                    value={item}
-                                />
-                            }
-                            label={item}
-                        />
-                    ))}
-                {e.schema.helper !== undefined? <FormHelperText>{e.schema.helper}</FormHelperText> : ""}
-            </FormControl>
-        </Au>
-    )
+export const  myRadio = e => {
+    // state = {
+    //     value : null
+    // };
+    // onChangeHande = (val) => {
+    //     this.setState({value: val})
+    // };
+    //render () {
+        return (
+            <Au>
+                <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
+                    <FormLabel>{e.schema.title}</FormLabel>
+                    <RadioGroup
+                        name={e.schema.id}
+                        value={e.value}
+                    >
+                        {e.schema.items.enum.map((item, i) => (
+                            <FormControlLabel
+                                value={item}
+                                onChange={(event) => e.onChange(event.target.value)}
+                                //onChange={() => this.onChangeHande(item)}
+                                disabled={e.readonly || e.schema.editType !== undefined}
+                                key={i}
+                                control={
+                                    <Radio
+                                        value={item}/>
+                                }
+                                label={item}
+                            />
+                        ))}
+                    </RadioGroup>
+                    {e.schema.helper !== undefined? <FormHelperText>{e.schema.helper}</FormHelperText> : ""}
+
+                </FormControl>
+            </Au>
+        )
+    //}
+
 };
 
 export const myCheckboxes = (e) => {

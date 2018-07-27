@@ -52,7 +52,7 @@ export const schemas = {
             icon: "format_list_bulleted",
             title: "Radio group",
             schema: {
-                type: "array",
+                type: "string",
                 "items": {
                     "type": "string",
                     "enum": [
@@ -61,7 +61,7 @@ export const schemas = {
                         "fuzz"
                     ]
                 },
-                "uniqueItems": true,
+                //"uniqueItems": true,
                 "editType": "radioGroupSchema"
             },
             uiSchema: {

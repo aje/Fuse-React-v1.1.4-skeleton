@@ -181,13 +181,21 @@ class AllForms extends Component {
         let schema = {};
         if(this.state.currentForm.schema !== undefined) {
             Object.keys(this.state.currentForm.uiSchema).map((key)=>{
-                 uiSchema[key] = {...this.state.currentForm.uiSchema[key],"ui:widget": mtd[this.state.currentForm.uiSchema[key].type]}
+                if (key !== "ui:order") {
+                    uiSchema[key] = {
+                        ...this.state.currentForm.uiSchema[key],
+                        "ui:widget": mtd[this.state.currentForm.uiSchema[key].type]
+                    }
+                }
             });
+            uiSchema["ui:order"] = this.state.currentForm.uiSchema["ui:order"];
             schema = {...this.state.currentForm.schema};
             Object.keys(schema.properties).map(key => {
                 delete schema.properties[key].editType;
             });
         }
+
+
 
         const ObjectFieldTemplate = (e) =>{
             const elements = e.properties.map((element, i) => {

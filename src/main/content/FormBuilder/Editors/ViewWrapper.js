@@ -103,6 +103,7 @@ class ViewWrapper extends Component{
     render() {
 
         const fieldHelper = (field, el) => {
+            console.log(typeof el)
             return (
                 <FieldWrapper
                     field={field}
@@ -111,6 +112,8 @@ class ViewWrapper extends Component{
                     changeOrder={this.props.changeOrder}
                     remove={this.props.removeField}>
                     {el(field)}
+
+
                 </FieldWrapper>
             )
         };
