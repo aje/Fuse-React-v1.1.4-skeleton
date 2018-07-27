@@ -5,3 +5,4 @@ export const EDIT_FORM_DETAIL = '[Form Builder] EDIT FORM DETAIL';
 export const CLEAR_FORM = '[Form Builder] CLEAR FORM';
 export const CHANGE_GRID = '[Form Builder] CHANGE GRID';
 export const EDIT_FORM = '[Form Builder] EDIT FORM';
+export const CHANGE_ORDER = '[Form Builder] CHANGE ORDER';

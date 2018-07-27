@@ -5,5 +5,6 @@ export  {
     clearForm,
     changeGrid,
     editForm,
+    changeOrder,
     editFormDetails
 } from './formBuilder.actions';

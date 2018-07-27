@@ -39,7 +39,7 @@ const addField = (state, action) => {
 
 
     // this.state.uiSchema[_slug] = field.uiSchema;
-    // this.state.uiSchema["ui:order"] = (state.uiSchema["ui:order"] || []).concat(_slug);
+    uiSchema["ui:order"] = (state.uiSchema["ui:order"] || []).concat(name);
 
     return {
         ...state,
@@ -55,8 +55,8 @@ const removeField = (state, action) => {
     delete schema.properties[action.field];
     const uiSchema = {...state.uiSchema};
     delete uiSchema[action.field];
-    // t.uiSchema["ui:order"] = state.uiSchema["ui:order"].filter(
-    //     (field) => field !== name);
+    uiSchema["ui:order"] = state.uiSchema["ui:order"].filter(
+        (field) => field !== action.field);
     // state.schema.required = requiredFields
     //     .filter(requiredFieldName => name !== requiredFieldName);
 
@@ -154,6 +154,32 @@ const editForm = (state, action) => {
     }
 };
 
+const reorder =  (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+};
+
+const changeOrder = (state, action) => {
+    //console.log(state.uiSchema)
+    const uiSchemaTemp = {...state.uiSchema};
+    let uiSchemaTempOrder = [];
+
+    const index = uiSchemaTemp["ui:order"].indexOf(action.field);
+    if(action.direction === "up") {
+        uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index,index - 1);
+    } else if (action.direction === "down") {
+        uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index,index + 1);
+    }
+    const uiSchema = {...uiSchemaTemp, "ui:order" : [...uiSchemaTempOrder]};
+    return {
+        ...state,
+        uiSchema
+    }
+};
+
 const formBuilder = (state = initialState, action) => {
     switch ( action.type )
     {
@@ -164,6 +190,7 @@ const formBuilder = (state = initialState, action) => {
         case aC.CLEAR_FORM: {return clearForm(state)}
         case aC.CHANGE_GRID: {return changeGrid(state, action)}
         case aC.EDIT_FORM: {return editForm(state, action)}
+        case aC.CHANGE_ORDER: {return changeOrder(state, action)}
         default:
         {
             return state;

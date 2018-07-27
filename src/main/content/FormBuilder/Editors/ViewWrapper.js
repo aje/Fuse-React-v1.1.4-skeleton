@@ -12,14 +12,71 @@ import * as CT from "../FormElements/CustomTemplates";
 import * as fuseActions from "store/actions";
 import FieldWrapper from "./FieldWrapper";
 import withRouter from "react-router-dom/es/withRouter";
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+
+const getItems = (count) => Array.from({length: count}, (v, k) => k).map(k => ({
+    id: `item-${k}`,
+    content: `item ${k}`
+}));
+
+const reorder =  (list, startIndex, endIndex) => {
+    const result = Array.from(list);
+    const [removed] = result.splice(startIndex, 1);
+    result.splice(endIndex, 0, removed);
+
+    return result;
+};
+
+
+const grid = 8;
+
+const getItemStyle = (draggableStyle, isDragging) => ({
+    // some basic styles to make the items look a bit nicer
+    userSelect: 'none',
+    padding: grid * 2,
+    margin: `0 0 ${grid}px 0`,
+
+    // change background colour if dragging
+    background: isDragging ? 'lightgreen' : 'grey',
+
+    // styles we need to apply on draggables
+    ...draggableStyle
+});
+
+const getListStyle = (isDraggingOver) => ({
+    background: isDraggingOver ? 'lightblue' : 'lightgrey',
+    padding: grid,
+    width: 250
+});
 
 class ViewWrapper extends Component{
 
     state = {
-        loading: false
+        loading: false,
+        items: getItems(10)
     };
 
-     saveForm = () => {
+
+
+    onDragEnd = (result) => {
+        // dropped outside the list
+        if(!result.destination) {
+            return;
+        }
+
+        const items = reorder(
+            this.state.items,
+            result.source.index,
+            result.destination.index
+        );
+
+        this.setState({
+            items:items
+        });
+    }
+
+
+    saveForm = () => {
         this.setState({loading:true})
         axios.post("https://valued-mediator-138113.firebaseio.com/forms.json", {
                 schema: this.props.formSchema,
@@ -42,6 +99,7 @@ class ViewWrapper extends Component{
 
     };
 
+
     render() {
 
         const fieldHelper = (field, el) => {
@@ -50,6 +108,7 @@ class ViewWrapper extends Component{
                     field={field}
                     changeGrid={this.props.changeGrid}
                     changeEditor={this.props.changeEditor}
+                    changeOrder={this.props.changeOrder}
                     remove={this.props.removeField}>
                     {el(field)}
                 </FieldWrapper>
@@ -59,16 +118,19 @@ class ViewWrapper extends Component{
         let uiSchema = {};
         if (this.props.uiSchema !== undefined) {
             Object.keys(this.props.uiSchema).map((key) => {
-                uiSchema[key] = {
-                    ...this.props.uiSchema[key],
-                    "ui:widget": (field) => fieldHelper(field, mtd[this.props.uiSchema[key].type])
+                if (key !== "ui:order") {
+                    uiSchema[key] = {
+                        ...this.props.uiSchema[key],
+                        "ui:widget": (field) => fieldHelper(field, mtd[this.props.uiSchema[key].type])
+                    }
                 }
             });
         }
+        uiSchema["ui:order"] = this.props.uiSchema["ui:order"];
 
         return (
             <Au>
-
+                <DragDropContext onDragEnd={this.onDragEnd}>
                     <Form schema={this.props.formSchema}
                           FieldTemplate={CT.CustomFieldTemplate}
                           uiSchema={uiSchema}
@@ -77,12 +139,55 @@ class ViewWrapper extends Component{
                     >
                         <Paper square elevation={1}>
                             <CardActions>
-                                <Button variant="contained" disabled={Object.keys(this.props.formSchema.properties).length === 0} color={"primary"} onClick={this.saveForm}>Save form</Button>
-                                <Button variant="contained" color={"secondary"}
+
+
+                                    <Button variant="contained" disabled={Object.keys(this.props.formSchema.properties).length === 0} color={"primary"} onClick={this.saveForm}>Save form</Button>
+
+
+                                    <Button variant="contained" color={"secondary"}
                                         onClick={this.props.clearForm}>Clear</Button>
+
                             </CardActions>
                         </Paper>
                     </Form>
+
+
+                        {/*<Droppable droppableId="droppable">*/}
+                            {/*{(provided, snapshot) => (*/}
+                                {/*<div*/}
+                                    {/*ref={provided.innerRef}*/}
+                                    {/*style={getListStyle(snapshot.isDraggingOver)}*/}
+                                    {/*{...provided.droppableProps}*/}
+                                {/*>*/}
+                                    {/*{this.state.items.map((item, index) => (*/}
+                                        {/*<Draggable*/}
+                                            {/*key={item.id}*/}
+                                            {/*draggableId={item.id}*/}
+                                            {/*index={index}*/}
+                                        {/*>*/}
+                                            {/*{(provided, snapshot) => (*/}
+                                                {/*<div>*/}
+                                                    {/*<div*/}
+                                                        {/*ref={provided.innerRef}*/}
+                                                        {/*{...provided.dragHandleProps}*/}
+                                                        {/*{...provided.draggableProps}*/}
+                                                        {/*style={getItemStyle(*/}
+                                                            {/*provided.draggableProps.style,*/}
+                                                            {/*snapshot.isDragging*/}
+                                                        {/*)}*/}
+                                                    {/*>*/}
+                                                        {/*{item.content}*/}
+                                                    {/*</div>*/}
+                                                    {/*{provided.placeholder}*/}
+                                                {/*</div>*/}
+                                            {/*)}*/}
+                                        {/*</Draggable>*/}
+                                    {/*))}*/}
+                                    {/*{provided.placeholder}*/}
+                                {/*</div>*/}
+                            {/*)}*/}
+                        {/*</Droppable>*/}
+                </DragDropContext>
             </Au>
         );
     }
@@ -94,6 +199,7 @@ const mapDispatchToProps = dispatch => {
         removeField: (field) => dispatch(Actions.removeField(field)),
         clearForm: () => dispatch(Actions.clearForm()),
         changeGrid: (field, grid)  => dispatch(Actions.changeGrid(field, grid)),
+        changeOrder: (field, direction)  => dispatch(Actions.changeOrder(field, direction)),
         showMessage: (options)  => dispatch(fuseActions.showMessage(options)),
     };
 };

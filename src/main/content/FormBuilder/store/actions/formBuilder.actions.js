@@ -50,3 +50,11 @@ export const editForm = (schema,uiSchema) => {
         uiSchema: uiSchema,
     }
 };
+
+export const changeOrder = (field,direction) => {
+    return {
+        type   : aC.CHANGE_ORDER,
+        field: field,
+        direction: direction,
+    }
+};
