@@ -151,7 +151,6 @@ class AllForms extends Component {
                                 <IconButton
                                     onClick={(ev) => {
                                         ev.stopPropagation();
-                                        //console.log(row)
                                         this.editFormHandle(row.original.schema,row.original.uiSchema,ids[row.index])
                                     }}
                                 >
@@ -160,7 +159,6 @@ class AllForms extends Component {
                                 <IconButton
                                     onClick={(ev) => {
                                         ev.stopPropagation();
-                                        //console.log(ids[row.index]);
                                         this.removeForm(ids[row.index]);
                                     }}
                                 >
@@ -190,9 +188,9 @@ class AllForms extends Component {
             });
             uiSchema["ui:order"] = this.state.currentForm.uiSchema["ui:order"];
             schema = {...this.state.currentForm.schema};
-            Object.keys(schema.properties).map(key => {
-                delete schema.properties[key].editType;
-            });
+            // Object.keys(schema.properties).map(key => {
+            //     delete schema.properties[key].editType;
+            // });
         }
 
 

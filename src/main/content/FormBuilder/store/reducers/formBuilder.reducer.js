@@ -18,7 +18,6 @@ const initialState = {
 
 const addField = (state, action) => {
     // create a temp for schema and uiSchema
-    //console.log(action.field);
     const schema = {...state.schema};
     schema.properties = {...state.schema.properties};
 
@@ -34,7 +33,6 @@ const addField = (state, action) => {
     uiSchema[name] = action.field.uiSchema;
 
     //const tUi = {};
-    //console.log(schema);
 
 
 
@@ -71,7 +69,6 @@ const removeField = (state, action) => {
 };
 
 const editField = (state, action) => {
-    //console.log(action);
     const fieldName = action.field.id.replace('root_', '');
     const schema = {...state.schema};
     schema.properties = {...state.schema.properties};
@@ -124,11 +121,13 @@ const editFormDetails = (state, action) => {
 
 const clearForm = (state) => {
     const schema = {...initialState.schema};
+    const uiSchema = {};
     const currentIndex= 0;
     return {
         ...state,
         schema,
-        currentIndex
+        currentIndex,
+        uiSchema
     }
 };
 
@@ -163,7 +162,6 @@ const reorder =  (list, startIndex, endIndex) => {
 };
 
 const changeOrder = (state, action) => {
-    //console.log(state.uiSchema)
     const uiSchemaTemp = {...state.uiSchema};
     let uiSchemaTempOrder = [];
 

@@ -1,11 +1,9 @@
 import React from 'react';
 import {withStyles} from "@material-ui/core/styles/index";
 import classNames from "classnames";
-import Paper from "@material-ui/core/es/Paper/Paper";
 import CardContent from "@material-ui/core/es/CardContent/CardContent";
 import Button from "@material-ui/core/es/Button/Button";
 import Icon from "@material-ui/core/es/Icon/Icon";
-import Card from "@material-ui/core/es/Card/Card";
 import IconButton from "@material-ui/core/es/IconButton/IconButton";
 
 const styles = theme => ({
@@ -48,7 +46,6 @@ const styles = theme => ({
 
 const fieldWrapper = (props) => {
     const {classes} = props;
-    //console.log(props.field.schema.grid);
     const fieldId = props.field.id.replace('root_', '');
     return (
         <div className={props.classes.hover}>

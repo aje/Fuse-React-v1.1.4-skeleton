@@ -103,7 +103,6 @@ class ViewWrapper extends Component{
     render() {
 
         const fieldHelper = (field, el) => {
-            console.log(typeof el)
             return (
                 <FieldWrapper
                     field={field}

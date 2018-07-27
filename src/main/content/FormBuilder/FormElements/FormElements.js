@@ -38,7 +38,7 @@ export const myText = (e) => {
     return (
         <Au>
             <TextField fullWidth
-                       disabled={e.readonly || e.schema.editType !== undefined}
+                       disabled={e.readonly}
                        required={e.required}
                        multiline={(e.schema.textarea)}
                        rows={e.schema.rows}
@@ -76,7 +76,7 @@ export const myDate = (e) => {
     return (
         <Au>
             <TextField fullWidth
-                       disabled={e.readonly || e.schema.editType !== undefined}
+                       disabled={e.readonly}
                        required={e.required}
                        type={e.schema.inputType}
                        label={e.schema.title}
@@ -99,16 +99,9 @@ export const myDate = (e) => {
 };
 
 export const  myRadio = e => {
-    // state = {
-    //     value : null
-    // };
-    // onChangeHande = (val) => {
-    //     this.setState({value: val})
-    // };
-    //render () {
         return (
             <Au>
-                <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
+                <FormControl required={e.schema.require} fullWidth disabled={e.readonly}>
                     <FormLabel>{e.schema.title}</FormLabel>
                     <RadioGroup
                         name={e.schema.id}
@@ -118,8 +111,7 @@ export const  myRadio = e => {
                             <FormControlLabel
                                 value={item}
                                 onChange={(event) => e.onChange(event.target.value)}
-                                //onChange={() => this.onChangeHande(item)}
-                                disabled={e.readonly || e.schema.editType !== undefined}
+                                disabled={e.readonly}
                                 key={i}
                                 control={
                                     <Radio
@@ -134,18 +126,16 @@ export const  myRadio = e => {
                 </FormControl>
             </Au>
         )
-    //}
-
 };
 
 export const myCheckboxes = (e) => {
     return (
         <Au>
-            <FormControl required={e.schema.require} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
+            <FormControl required={e.schema.require} fullWidth disabled={e.readonly}>
                 <FormLabel>{e.schema.title}</FormLabel>
                 {e.schema.items.enum.map((item, i) => (
                     <FormControlLabel
-                        key={i} disabled={e.readonly || e.schema.editType !== undefined}
+                        key={i} disabled={e.readonly}
                         control={
                             <Checkbox
                               value={item}
@@ -163,7 +153,7 @@ export const myCheckboxes = (e) => {
 export const mySelect = (e) => {
     return (
        <Au>
-           <FormControl required={e.required} fullWidth disabled={e.readonly || e.schema.editType !== undefined}>
+           <FormControl required={e.required} fullWidth disabled={e.readonly}>
                <InputLabel>{e.schema.title}</InputLabel>
                 <Select value="f" style={{width: "100%"}}>
                     <MenuItem value="f">Please select</MenuItem>
@@ -202,7 +192,7 @@ export const fileUpload = (e) => {
     return (
         <Au>
             <TextField fullWidth
-                       disabled={e.readonly || e.schema.editType !== undefined}
+                       disabled={e.readonly}
                        required={e.required}
                        type={"file"}
                        label={e.schema.title}

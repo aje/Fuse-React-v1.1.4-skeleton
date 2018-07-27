@@ -19,7 +19,6 @@ const FieldList = (props) => {
         return (
             <List dense key={key} subheader={<ListSubheader>{key}</ListSubheader>}>
                 {Object.keys(schemas.schemas[key]).map(key1 => {
-                    console.log(key1);
                     return (
                         <Au key={key1}>
                             <ListItem>

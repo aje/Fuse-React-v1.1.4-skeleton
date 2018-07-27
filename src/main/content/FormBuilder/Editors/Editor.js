@@ -59,8 +59,6 @@ class Editor  extends Component{
                     maximum: item.maximum
                 };
 
-                console.log(item.items);
-
 
                 if (item.items !== undefined) {
                     tdata.options = [...item.items.enum]
