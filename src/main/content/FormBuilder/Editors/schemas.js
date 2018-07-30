@@ -71,6 +71,23 @@ export const imgSchema = {
 export const fileUploadSchema = {
     helper: {type: "string", title: "Instructions for user"},
     require: {type: "boolean", title: "Require", default: false},
+    accept: {type: "array", title: "Accept" ,
+        "items": {
+            "type": "string",
+            "enum": [
+                ".jpeg",
+                ".png",
+                ".gif",
+                ".mp4",
+                ".jar",
+                ".zip",
+                "audio/*",
+                "video/*",
+                "image/*",
+
+            ]
+        },
+        "uniqueItems": true},
     maximum: {type: "integer", title: "Max file size (MB)", "maximum": 200, minimum: 0}
 };
 

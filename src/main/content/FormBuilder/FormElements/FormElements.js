@@ -13,10 +13,10 @@ import FormHelperText from "@material-ui/core/es/FormHelperText/FormHelperText";
 import FormLabel from "@material-ui/core/es/FormLabel/FormLabel";
 import InputAdornment from "@material-ui/core/es/InputAdornment/InputAdornment";
 import Icon from "@material-ui/core/es/Icon/Icon";
-import FieldWrapper from "../Editors/FieldWrapper";
 import Divider from "@material-ui/core/es/Divider/Divider";
 import RadioGroup from "@material-ui/core/es/RadioGroup/RadioGroup";
-import {Component} from "react";
+import axios from "axios";
+import Dropzone from "react-dropzone";
 
 
 export const myText = (e) => {
@@ -70,7 +70,6 @@ export const myDate = (e) => {
             break;
         case "datetime-local":
             icon = "date_range";
-            break;
             break;
     }
     return (
@@ -188,21 +187,75 @@ export const staticImg = (e) => {
         )
 };
 
+function processFile(files) {
+    const f = files[0];
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.readAsDataURL(f);
+    });
+}
+
+const onDrop =(accepted, rejected)=> {
+    if (rejected.length) {
+        //do something with rejected files
+    } else {
+        let data = new FormData();
+        //for (let i = 0; i < this.state.files.length; i++) {
+            let file = accepted[0];
+            data.append("file" + 0, file, file.name);
+        //}
+        const config = {
+            headers: { 'content-type': 'multipart/form-data;boundary=gc0p4Jq0M2Yt08jU534c0p' }
+        };
+        axios.post("upload-files", data, config);
+    }
+};
+
+
 export const fileUpload = (e) => {
+    let acceptTypes = "";
+    if(e.schema.accept !== undefined) {
+         acceptTypes = e.schema.accept.join(", ");
+        //console.log(acceptTypes);
+    }
+    const maxSize = e.schema.maximum*1024*1024;
     return (
         <Au>
-            <TextField fullWidth
-                       disabled={e.readonly}
-                       required={e.required}
-                       type={"file"}
-                       label={e.schema.title}
-                       helperText={e.schema.helper}
-                       defaultValue={e.schema.default}
-                       placeholder={e.schema.placeholder}
-                       InputLabelProps={{
-                           shrink: true,
-                       }}
-            />
+            <InputLabel>{e.schema.title} {e.required ? "*" : ""}</InputLabel>
+            {/*<TextField fullWidth*/}
+                       {/*disabled={e.readonly}*/}
+                       {/*required={e.required}*/}
+                       {/*type={"file"}*/}
+                       {/*label={e.schema.title}*/}
+                       {/*helperText={e.schema.helper}*/}
+                       {/*defaultValue={e.schema.default}*/}
+                       {/*placeholder={e.schema.placeholder}*/}
+                       {/*onChange={(event) => processFile(event.target.files).then(d=>{*/}
+                           {/*console.log(d);*/}
+                           {/*return e.onChange;*/}
+                       {/*})}*/}
+                       {/*InputLabelProps={{*/}
+                           {/*shrink: true,*/}
+                       {/*}}*/}
+            {/*/>*/}
+            <div className="dropzonev">
+            <Dropzone
+                accept={acceptTypes}
+                style={{position: "relative", width:"100%",height: 56,borderRadius: 4, border: "3px dotted #ccc", textAlign: "center", lineHeight: "50px"}}
+                name={"fgh"}
+                maxSize={maxSize > 0 ? maxSize : Infinity}
+                multiple={false}
+                acceptStyle={{border: "3px dotted green"}}
+                rejectStyle={{border: "3px dotted red"}}
+
+                onDrop={onDrop}>
+                <p>{e.schema.helper !== undefined? <Au>{e.schema.helper}</Au> : "Try dropping here, or click to upload."}
+                    </p>
+            </Dropzone>
+            </div>
+            {acceptTypes !== "" ?  <FormHelperText>Acceptable file types: {acceptTypes} </FormHelperText> : ""}
+            {maxSize > 0 ? <FormHelperText> ( Maximum file size: {e.schema.maximum}MB )</FormHelperText> : ""}
         </Au>
         )
 };

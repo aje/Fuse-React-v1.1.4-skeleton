@@ -28,25 +28,21 @@ const reorder =  (list, startIndex, endIndex) => {
 };
 
 
-const grid = 8;
+const grid = 0;
 
-const getItemStyle = (draggableStyle, isDragging) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: 'none',
-    padding: grid * 2,
-    margin: `0 0 ${grid}px 0`,
+function processFile(files) {
+    const f = files[0];
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.readAsDataURL(f);
+    });
+}
 
-    // change background colour if dragging
-    background: isDragging ? 'lightgreen' : 'grey',
-
-    // styles we need to apply on draggables
-    ...draggableStyle
-});
 
 const getListStyle = (isDraggingOver) => ({
     background: isDraggingOver ? 'lightblue' : 'lightgrey',
     padding: grid,
-    width: 250
 });
 
 class ViewWrapper extends Component{
@@ -64,15 +60,17 @@ class ViewWrapper extends Component{
             return;
         }
 
-        const items = reorder(
-            this.state.items,
-            result.source.index,
-            result.destination.index
-        );
+        // const items = reorder(
+        //     this.state.items,
+        //     result.source.index,
+        //     result.destination.index
+        // );
 
-        this.setState({
-            items:items
-        });
+        this.props.changeOrder(result.source.index,result.destination.index);
+
+        // this.setState({
+        //     items:items
+        // });
     }
 
 
@@ -83,14 +81,14 @@ class ViewWrapper extends Component{
                 uiSchema: this.props.uiSchema
             })
             .then((res) => {
-                this.setState({loading: false})
+                this.setState({loading: false});
                 this.props.showMessage({
                     message     : 'Form Saved!',
                     anchorOrigin: {
                         vertical  : 'bottom',
                         horizontal: 'right'
                     }
-                })
+                });
                 this.props.history.push('/form-builder/forms')
             }).catch((error) => {
                 this.setState({loading: false})
@@ -133,32 +131,41 @@ class ViewWrapper extends Component{
         return (
             <Au>
                 <DragDropContext onDragEnd={this.onDragEnd}>
-                    <Form schema={this.props.formSchema}
-                          FieldTemplate={CT.CustomFieldTemplate}
-                          uiSchema={uiSchema}
-                          ObjectFieldTemplate={CT.ObjectFieldTemplate}
-                          className={this.state.loading ? "loading" : ""}
-                    >
-                        <Paper square elevation={1}>
-                            <CardActions>
+                    <Droppable droppableId="droppable" >
+
+                        {/*style={getListStyle(snapshot.isDraggingOver)}*/}
+                        {(provided, snapshot) => (
+                            <div
+                                ref={provided.innerRef}
+                                style={getListStyle(snapshot.isDraggingOver)}
+                                {...provided.droppableProps}
+                            >
+                            <Form schema={this.props.formSchema}
+                                  FieldTemplate={CT.CustomFieldTemplate}
+                                  uiSchema={uiSchema}
+                                  ObjectFieldTemplate={CT.DropFieldTemplate}
+                                  className={this.state.loading ? "loading" : ""}
+                            >
+                                <Paper square elevation={1}>
+                                    <CardActions>
 
 
-                                    <Button variant="contained" disabled={Object.keys(this.props.formSchema.properties).length === 0} color={"primary"} onClick={this.saveForm}>Save form</Button>
+                                            <Button variant="contained" disabled={Object.keys(this.props.formSchema.properties).length === 0} color={"primary"} onClick={this.saveForm}>Save form</Button>
 
 
-                                    <Button variant="contained" color={"secondary"}
-                                        onClick={this.props.clearForm}>Clear</Button>
+                                            <Button variant="contained" color={"secondary"}
+                                                onClick={this.props.clearForm}>Clear</Button>
 
-                            </CardActions>
-                        </Paper>
-                    </Form>
+                                    </CardActions>
+                                </Paper>
+                            </Form>
 
 
                         {/*<Droppable droppableId="droppable">*/}
                             {/*{(provided, snapshot) => (*/}
                                 {/*<div*/}
                                     {/*ref={provided.innerRef}*/}
-                                    {/*style={getListStyle(snapshot.isDraggingOver)}*/}
+                                    {/*//style={getListStyle(snapshot.isDraggingOver)}*/}
                                     {/*{...provided.droppableProps}*/}
                                 {/*>*/}
                                     {/*{this.state.items.map((item, index) => (*/}
@@ -185,10 +192,10 @@ class ViewWrapper extends Component{
                                             {/*)}*/}
                                         {/*</Draggable>*/}
                                     {/*))}*/}
-                                    {/*{provided.placeholder}*/}
-                                {/*</div>*/}
-                            {/*)}*/}
-                        {/*</Droppable>*/}
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
                 </DragDropContext>
             </Au>
         );
@@ -201,7 +208,7 @@ const mapDispatchToProps = dispatch => {
         removeField: (field) => dispatch(Actions.removeField(field)),
         clearForm: () => dispatch(Actions.clearForm()),
         changeGrid: (field, grid)  => dispatch(Actions.changeGrid(field, grid)),
-        changeOrder: (field, direction)  => dispatch(Actions.changeOrder(field, direction)),
+        changeOrder: (start, end)  => dispatch(Actions.changeOrder(start, end)),
         showMessage: (options)  => dispatch(fuseActions.showMessage(options)),
     };
 };

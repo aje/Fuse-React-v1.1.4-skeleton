@@ -90,23 +90,17 @@ class FormBuilder extends Component {
                 content={
                     <div className="p-24">
                         <Grid container spacing={24}>
-                            <FuseAnimate animation="transition.slideLeftIn" delay={200}>
                                 <Grid item xs={2}>
                                     <FieldList  changeEditor={this.onChangeEditor} />
                                 </Grid>
-                            </FuseAnimate>
 
-                            <FuseAnimate animation="transition.slideUpIn" delay={200}>
                                 <Grid item xs={7}>
                                     <ViewWrapper  changeEditor={this.onChangeEditor}/>
                                 </Grid>
-                            </FuseAnimate>
 
-                            <FuseAnimate animation="transition.slideRightIn" delay={200}>
                                 <Grid item xs={3}>
                                     <Editor item={this.state.currentItem}/>
                                 </Grid>
-                            </FuseAnimate>
                         </Grid>
                     </div>
                 }

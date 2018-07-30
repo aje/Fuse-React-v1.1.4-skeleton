@@ -26,10 +26,12 @@ const addField = (state, action) => {
     // create a random name
     const itemp = state.currentIndex + 1;
 
+    //console.log(action.field.title);
+
     const name = `field_${itemp}`;
     // t.;
     // add field to schema and ui to uiSchema
-    schema.properties[name] = {...action.field.schema, title:name};
+    schema.properties[name] = {...action.field.schema, title:itemp + ". "+action.field.title };
     uiSchema[name] = action.field.uiSchema;
 
     //const tUi = {};
@@ -82,7 +84,8 @@ const editField = (state, action) => {
         inputType: action.data.inputType,
         rows: action.data.rows,
         src: action.data.src,
-        maximum: action.data.maximum
+        maximum: action.data.maximum,
+        accept: action.data.accept,
     };
 
     if (action.data.options !== undefined) {
@@ -165,12 +168,19 @@ const changeOrder = (state, action) => {
     const uiSchemaTemp = {...state.uiSchema};
     let uiSchemaTempOrder = [];
 
-    const index = uiSchemaTemp["ui:order"].indexOf(action.field);
-    if(action.direction === "up") {
-        uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index,index - 1);
-    } else if (action.direction === "down") {
-        uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index,index + 1);
+    if (action.end === "up" || action.end === "down") {
+        const index = uiSchemaTemp["ui:order"].indexOf(action.start);
+
+        if (action.end === "up") {
+            uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index, index - 1);
+        } else if (action.end === "down") {
+            uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], index, index + 1);
+        }
+    } else {
+        uiSchemaTempOrder = reorder(state.uiSchema["ui:order"], action.start,action.end);
     }
+
+
     const uiSchema = {...uiSchemaTemp, "ui:order" : [...uiSchemaTempOrder]};
     return {
         ...state,

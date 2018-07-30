@@ -77,6 +77,9 @@ class Editor  extends Component{
                     },
                     "maximum": {
                         "ui:widget": "range"
+                    },
+                    "accept": {
+                        "ui:widget": "checkboxes"
                     }
 
                 };
