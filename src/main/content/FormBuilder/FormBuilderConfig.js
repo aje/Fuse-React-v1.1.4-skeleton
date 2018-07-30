@@ -1,6 +1,7 @@
 import FormBuilder from './FormBuilder';
 import AllForms from "./Forms/AllForms";
 import {authRoles} from 'auth/auth';
+import SingleForm from "./Forms/SingleForm";
 
 export const FormBuilderConfig = {
     settings: {
@@ -22,6 +23,10 @@ export const FormBuilderConfig = {
         {
             path     : '/form-builder/edit-form',
             component: FormBuilder
+        },
+        {
+            path     : '/form-builder/forms/:id',
+            component: SingleForm
         },
         {
             path     : '/form-builder/forms',

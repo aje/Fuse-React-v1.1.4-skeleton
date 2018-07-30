@@ -73,7 +73,7 @@ export const schemas = {
             title: "Date & Time",
             schema: {
                 "type": "string",
-                "format": "date-time",
+                //"format": "date",
                 "editType": "dateTime",
                 inputType: "datetime-local"
             },

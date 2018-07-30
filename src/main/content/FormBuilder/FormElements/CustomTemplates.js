@@ -12,7 +12,7 @@ export const CustomFieldTemplate = (e) => {
 
 
 export const ObjectFieldTemplate = (e) => {
-    console.log(e)
+    //console.log(e)
     const elements = e.properties.map((element, i) => {
         return <Grid item key={i}
                      xs={element.content.props.schema.grid ? element.content.props.schema.grid : 12}>{element.content}</Grid>;
@@ -53,7 +53,7 @@ const getListStyle = (isDraggingOver) => ({
 });
 
 export const DropFieldTemplate = (e) => {
-    console.log(e)
+    //console.log(e)
     const elements = e.properties.map((element, i) => {
         return <Grid item key={i}
                      xs={element.content.props.schema.grid ? element.content.props.schema.grid : 12}>

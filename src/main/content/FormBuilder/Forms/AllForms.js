@@ -50,15 +50,17 @@ class AllForms extends Component {
         loaded: false,
         modal: false,
         currentForm: {},
+        currentFormId: null
     };
 
     handleModal = () => {
         const t = this.state.modal;
         this.setState({ modal: !t });
     };
-    openForm = (schema) => {
+    openForm = (schema,id) => {
         this.handleModal();
         this.setState({currentForm: schema})
+        this.setState({currentFormId: id})
     };
     componentDidMount() {
         this.getDate();
@@ -110,12 +112,13 @@ class AllForms extends Component {
                 data={data}
                 autoGenerateColumns={ false }
                 getTrProps={(state, rowInfo, column) => {
+
                     return {
                         className: "cursor-pointer",
                         onClick  : (e, handleOriginal) => {
                             if ( rowInfo )
                             {
-                                this.openForm(rowInfo.original);
+                                this.openForm(rowInfo.original,ids[rowInfo.index]);
                             }
                         }
                     }
@@ -224,7 +227,7 @@ class AllForms extends Component {
                 header={
                     <div className={classNames(classes.root, "p-24")}>
                         <FuseAnimate animation="transition.expandIn" delay={300}>
-                            <Icon className={classNames(classes.logoIcon, "mr-16")}>note_add</Icon>
+                            <Icon className={classNames(classes.logoIcon, "mr-16")}>list</Icon>
                         </FuseAnimate>
                         <FuseAnimate animation="transition.slideLeftIn" delay={300}>
                             <span className={classNames(classes.logoText)}>All Forms</span>
@@ -260,7 +263,9 @@ class AllForms extends Component {
                                 <Button onClick={()=> this.editFormHandle(this.state.currentForm.schema,uiSchema)} color="primary">
                                     Edit
                                 </Button>
-                                <Button onClick={this.handleModal} color="secondary" autoFocus>
+                                <Button onClick={() => {
+                                    this.props.history.push("/form-builder/forms/"+this.state.currentFormId)
+                                }} color="secondary" autoFocus>
                                     See in page
                                 </Button>
                             </DialogActions>

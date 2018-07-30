@@ -47,6 +47,8 @@ export const myText = (e) => {
                        helperText={e.schema.helper}
                        defaultValue={e.schema.default}
                        placeholder={e.schema.placeholder}
+                       //value={e.value}
+                       onChange={(event) => e.onChange(event.target.value)}
                        InputProps={icon ? {
                            startAdornment: (
                                <InputAdornment position="start">
@@ -82,6 +84,7 @@ export const myDate = (e) => {
                        helperText={e.schema.helper}
                        defaultValue={e.schema.default}
                        placeholder={e.schema.placeholder}
+                       onChange={(event) => e.onChange(event.target.value)}
                        InputLabelProps={{
                            shrink: true,
                        }}
@@ -127,6 +130,7 @@ export const  myRadio = e => {
         )
 };
 
+let val = [];
 export const myCheckboxes = (e) => {
     return (
         <Au>
@@ -135,6 +139,15 @@ export const myCheckboxes = (e) => {
                 {e.schema.items.enum.map((item, i) => (
                     <FormControlLabel
                         key={i} disabled={e.readonly}
+                        onChange={
+                            (event) => {
+                                if(val.includes(event.target.value))
+                                    val = val.filter(item => item !== event.target.value);
+                                else
+                                    val.push(event.target.value);
+                                e.onChange(val)
+                            }
+                        }
                         control={
                             <Checkbox
                               value={item}
@@ -154,8 +167,12 @@ export const mySelect = (e) => {
        <Au>
            <FormControl required={e.required} fullWidth disabled={e.readonly}>
                <InputLabel>{e.schema.title}</InputLabel>
-                <Select value="f" style={{width: "100%"}}>
-                    <MenuItem value="f">Please select</MenuItem>
+                <Select  style={{width: "100%"}}
+                         value={e.value !== undefined ? e.value : "f"}
+                        onChange={(event) => {
+                            e.onChange(event.target.value);
+                        }}>
+                    <MenuItem value="f" selected>Please select</MenuItem>
                     {(e.schema.items !== undefined) ? e.schema.items.enum.map((item, i) => (
                         <MenuItem value={item} key={i}>{item}</MenuItem>
                     )) : null}
@@ -187,14 +204,6 @@ export const staticImg = (e) => {
         )
 };
 
-function processFile(files) {
-    const f = files[0];
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (event) => resolve(event.target.result);
-        reader.readAsDataURL(f);
-    });
-}
 
 const onDrop =(accepted, rejected)=> {
     if (rejected.length) {
